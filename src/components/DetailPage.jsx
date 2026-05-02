@@ -28,15 +28,6 @@ export default function DetailPage({ section, onBack }) {
             'linear-gradient(90deg, rgba(5,5,14,0.34) 0%, rgba(5,5,14,0.08) 44%, rgba(5,5,14,0.28) 100%)',
         }}
       />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(circle at 62% 42%, rgba(255, 202, 134, 0.18), rgba(5,5,14,0) 42%)',
-        }}
-      />
-
       <motion.button
         type="button"
         onClick={onBack}

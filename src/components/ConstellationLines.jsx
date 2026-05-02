@@ -80,10 +80,10 @@ export default function ConstellationLines({ isHidden = false }) {
     >
       <defs>
         <linearGradient id="constLine" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="rgba(245, 222, 181, 0.08)" />
-          <stop offset="40%" stopColor="rgba(245, 222, 181, 0.58)" />
-          <stop offset="68%" stopColor="rgba(240, 183, 105, 0.42)" />
-          <stop offset="100%" stopColor="rgba(245, 222, 181, 0.1)" />
+          <stop offset="0%" stopColor="rgba(227, 184, 122, 0.05)" />
+          <stop offset="40%" stopColor="rgba(236, 199, 145, 0.42)" />
+          <stop offset="68%" stopColor="rgba(202, 133, 68, 0.3)" />
+          <stop offset="100%" stopColor="rgba(227, 184, 122, 0.06)" />
         </linearGradient>
       </defs>
       {paths.map((path) => (
@@ -91,28 +91,27 @@ export default function ConstellationLines({ isHidden = false }) {
           <motion.path
             d={path}
             fill="none"
-            stroke="rgba(255, 229, 185, 0.16)"
-            strokeWidth="1"
-            strokeDasharray="1 8"
+            stroke="rgba(226, 184, 122, 0.2)"
+            strokeWidth="0.7"
             strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
             initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 0.68 }}
+            animate={{ pathLength: 1, opacity: 0.62 }}
             transition={{ duration: 2.8, delay: 0.7, ease: 'easeOut' }}
-            style={{ filter: 'drop-shadow(0 0 4px rgba(240,201,138,0.35))' }}
+            style={{ filter: 'drop-shadow(0 0 3px rgba(181,118,58,0.28))' }}
           />
           <motion.path
             d={path}
             fill="none"
             stroke="url(#constLine)"
             strokeWidth="0.55"
-            strokeDasharray="1 9"
+            strokeDasharray="1.2 7"
             strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
             initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 0.82 }}
+            animate={{ pathLength: 1, opacity: 0.72 }}
             transition={{ duration: 2.6, delay: 0.85, ease: 'easeOut' }}
-            style={{ filter: 'drop-shadow(0 0 2px rgba(240,201,138,0.45))' }}
+            style={{ filter: 'drop-shadow(0 0 2px rgba(202,133,68,0.34))' }}
           />
         </g>
       ))}

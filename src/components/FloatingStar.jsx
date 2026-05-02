@@ -2,18 +2,17 @@ import { motion } from 'motion/react'
 
 function StarMark({ active = false }) {
   return (
-    <span className="relative flex h-11 w-11 items-center justify-center">
-      {/* Outer thin ring */}
+    <span className="relative flex h-10 w-10 items-center justify-center">
       <span
         aria-hidden="true"
-        className="absolute inset-1 rounded-full border transition-all duration-700"
+        className="absolute inset-[5px] rounded-full border transition-all duration-700"
         style={{
           borderColor: active
-            ? 'rgba(255, 222, 170, 0.82)'
-            : 'rgba(255, 222, 170, 0.48)',
+            ? 'rgba(249, 216, 159, 0.78)'
+            : 'rgba(232, 194, 132, 0.32)',
           boxShadow: active
-            ? '0 0 0 1px rgba(255,222,170,0.12), 0 0 32px rgba(240,178,91,0.42)'
-            : '0 0 22px rgba(240,178,91,0.22)',
+            ? '0 0 0 1px rgba(249,216,159,0.12), 0 0 28px rgba(211,137,62,0.38)'
+            : '0 0 16px rgba(181,118,58,0.18)',
         }}
       />
       {active && (
@@ -21,67 +20,70 @@ function StarMark({ active = false }) {
           aria-hidden="true"
           className="absolute inset-0 rounded-full border"
           style={{
-            borderColor: 'rgba(255, 222, 170, 0.22)',
-            transform: 'scale(1.34)',
+            borderColor: 'rgba(249, 216, 159, 0.18)',
+            transform: 'scale(1.24)',
           }}
         />
       )}
-      {/* Soft amber glow */}
-      <span
+      <motion.span
         aria-hidden="true"
-        className="absolute h-20 w-20 rounded-full blur-[18px] opacity-90"
+        className="absolute h-16 w-16 rounded-full blur-[16px]"
         style={{
           background:
-            'radial-gradient(circle, rgba(255,232,184,0.9) 0%, rgba(240,172,83,0.3) 34%, rgba(240,201,138,0) 72%)',
+            'radial-gradient(circle, rgba(247,216,166,0.66) 0%, rgba(206,133,65,0.18) 38%, rgba(206,133,65,0) 72%)',
         }}
+        animate={{
+          opacity: active ? [0.78, 1, 0.78] : [0.42, 0.58, 0.42],
+          scale: active ? [1, 1.08, 1] : [0.96, 1.04, 0.96],
+        }}
+        transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut' }}
       />
       <span
         aria-hidden="true"
-        className="absolute h-px w-10 origin-center"
+        className="absolute h-px w-8 origin-center"
         style={{
           background:
-            'linear-gradient(90deg, transparent, rgba(255,238,204,0.82), transparent)',
+            'linear-gradient(90deg, transparent, rgba(244,218,174,0.5), transparent)',
           filter: 'blur(0.2px)',
         }}
       />
       <span
         aria-hidden="true"
-        className="absolute h-10 w-px origin-center"
+        className="absolute h-8 w-px origin-center"
         style={{
           background:
-            'linear-gradient(180deg, transparent, rgba(255,238,204,0.82), transparent)',
+            'linear-gradient(180deg, transparent, rgba(244,218,174,0.5), transparent)',
           filter: 'blur(0.2px)',
         }}
       />
       <span
         aria-hidden="true"
-        className="absolute h-px w-7 origin-center rotate-45"
+        className="absolute h-px w-6 origin-center rotate-45"
         style={{
           background:
-            'linear-gradient(90deg, transparent, rgba(255,216,158,0.58), transparent)',
+            'linear-gradient(90deg, transparent, rgba(229,176,104,0.36), transparent)',
         }}
       />
       <span
         aria-hidden="true"
-        className="absolute h-px w-7 origin-center -rotate-45"
+        className="absolute h-px w-6 origin-center -rotate-45"
         style={{
           background:
-            'linear-gradient(90deg, transparent, rgba(255,216,158,0.58), transparent)',
+            'linear-gradient(90deg, transparent, rgba(229,176,104,0.36), transparent)',
         }}
       />
-      {/* Five-point star, not a dot */}
       <svg
         viewBox="0 0 24 24"
-        className="relative h-[19px] w-[19px]"
+        className="relative h-[15px] w-[15px]"
         aria-hidden="true"
         style={{
           filter:
-            'drop-shadow(0 0 3px rgba(255,250,230,1)) drop-shadow(0 0 10px rgba(255,218,150,0.95)) drop-shadow(0 0 20px rgba(240,170,85,0.9))',
+            'drop-shadow(0 0 2px rgba(255,241,210,0.88)) drop-shadow(0 0 8px rgba(222,160,86,0.66))',
         }}
       >
         <path
           d="M12 1.7 14.65 8.55 22 8.95 16.3 13.6 18.2 20.7 12 16.75 5.8 20.7 7.7 13.6 2 8.95 9.35 8.55 12 1.7Z"
-          fill="#fff9e8"
+          fill="#f9dfae"
         />
       </svg>
     </span>
@@ -97,7 +99,7 @@ export default function FloatingStar({
   isTransitioning = false,
 }) {
   const labelRight = side === 'right'
-  const isActive = activeStarId ? activeStarId === star.id : star.id === 'today'
+  const isActive = activeStarId === star.id
 
   return (
     <motion.button
@@ -119,7 +121,6 @@ export default function FloatingStar({
       animate={{
         opacity: isHidden ? 0 : 1,
         scale: isTransitioning && isActive ? [1, 1.2, 1.04] : 1,
-        y: [0, -5, 0],
       }}
       transition={{
         opacity: {
@@ -131,12 +132,6 @@ export default function FloatingStar({
           duration: isTransitioning && isActive ? 0.16 : 1.6,
           delay: isTransitioning && isActive ? 0 : star.delay,
           ease: 'easeOut',
-        },
-        y: {
-          duration: 7 + (star.delay % 1.5),
-          delay: star.delay,
-          repeat: Infinity,
-          ease: 'easeInOut',
         },
       }}
       whileHover={{ scale: 1.06 }}
@@ -154,8 +149,8 @@ export default function FloatingStar({
           className="font-serif text-[16px] leading-tight transition-colors duration-500 sm:text-[19px]"
           style={{
             fontFamily: '"Playfair Display", Georgia, serif',
-            color: 'rgba(245, 237, 222, 0.95)',
-            textShadow: '0 1px 8px rgba(0,0,0,0.7)',
+            color: 'rgba(242, 226, 201, 0.88)',
+            textShadow: '0 1px 10px rgba(0,0,0,0.75)',
             fontWeight: 400,
           }}
         >
@@ -164,8 +159,8 @@ export default function FloatingStar({
         <span
           className="mt-0.5 font-serif italic text-[12px] transition-colors duration-500 sm:text-[14px]"
           style={{
-            color: 'rgba(245, 237, 222, 0.55)',
-            textShadow: '0 1px 5px rgba(0,0,0,0.7)',
+            color: 'rgba(226, 198, 158, 0.5)',
+            textShadow: '0 1px 7px rgba(0,0,0,0.78)',
             letterSpacing: '0.02em',
           }}
         >

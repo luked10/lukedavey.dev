@@ -76,7 +76,9 @@ export default function DreamHero() {
           className="absolute inset-0 z-0"
           animate={{
             scale: isTransitioning ? 1.1 : 1,
-            filter: isTransitioning ? 'blur(2px)' : 'blur(0px)',
+            filter: isTransitioning
+              ? 'brightness(1.12) saturate(1.05) blur(1.5px)'
+              : 'brightness(1.12) saturate(1.05) blur(0px)',
           }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
         >
