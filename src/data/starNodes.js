@@ -1,11 +1,13 @@
+// Constellation order (used to draw connector arcs in order):
+// About → Journal → Photography → Listening → Today → Archive
 export const starNodes = [
   {
     id: "about",
     title: "About Me",
     subtitle: "who I am",
     content: "A soft introduction.",
-    x: "15%",
-    y: "24%",
+    x: "13%",
+    y: "50%",
     delay: 0
   },
   {
@@ -13,8 +15,8 @@ export const starNodes = [
     title: "Journal",
     subtitle: "late thoughts",
     content: "Longer reflections.",
-    x: "68%",
-    y: "25%",
+    x: "24%",
+    y: "15%",
     delay: 0.3
   },
   {
@@ -22,26 +24,26 @@ export const starNodes = [
     title: "Photography",
     subtitle: "moments",
     content: "Visual memories.",
-    x: "44%",
-    y: "82%",
+    x: "76%",
+    y: "16%",
     delay: 0.6
-  },
-  {
-    id: "today",
-    title: "Today",
-    subtitle: "current log",
-    content: "Daily thoughts.",
-    x: "84%",
-    y: "43%",
-    delay: 0.9
   },
   {
     id: "listening",
     title: "Listening",
     subtitle: "what moves me",
     content: "Music + writing.",
-    x: "62%",
-    y: "88%",
+    x: "88%",
+    y: "47%",
+    delay: 0.9
+  },
+  {
+    id: "today",
+    title: "Today",
+    subtitle: "current log",
+    content: "Daily thoughts.",
+    x: "80%",
+    y: "70%",
     delay: 1.2
   },
   {
@@ -49,8 +51,8 @@ export const starNodes = [
     title: "Archive",
     subtitle: "kept thoughts",
     content: "Older entries.",
-    x: "76%",
-    y: "68%",
+    x: "90%",
+    y: "88%",
     delay: 1.5
   }
 ];
