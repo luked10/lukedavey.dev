@@ -20,35 +20,12 @@ export default function DetailPage({ section, onBack }) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.55, ease: 'easeOut' }}
     >
-      <motion.div
-        className="absolute inset-0"
-        initial={{ scale: 1.04, filter: 'blur(8px)' }}
-        animate={{ scale: 1, filter: 'blur(0px)' }}
-        exit={{ scale: 1.02, filter: 'blur(4px)' }}
-        transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <img
-          src="/ld.webp"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full scale-105 object-cover opacity-75 blur-2xl"
-          draggable={false}
-        />
-        <img
-          src="/ld.webp"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover object-center"
-          draggable={false}
-        />
-      </motion.div>
-
       <div
         aria-hidden="true"
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(90deg, rgba(5,5,14,0.72) 0%, rgba(5,5,14,0.22) 44%, rgba(5,5,14,0.58) 100%)',
+            'linear-gradient(90deg, rgba(5,5,14,0.34) 0%, rgba(5,5,14,0.08) 44%, rgba(5,5,14,0.28) 100%)',
         }}
       />
       <div

@@ -100,7 +100,7 @@ export default function DreamHero() {
         <motion.div
           aria-hidden="true"
           className="absolute inset-0 z-10"
-          animate={{ opacity: detailSection ? 0 : 1 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.45, ease: 'easeOut' }}
           style={{ background: 'rgba(5, 5, 14, 0.18)' }}
         />
