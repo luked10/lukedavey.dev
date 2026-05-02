@@ -2,17 +2,17 @@ import { motion } from 'motion/react'
 
 function StarMark({ active = false }) {
   return (
-    <span className="relative z-30 flex h-10 w-10 shrink-0 items-center justify-center">
+    <span className="relative z-30 flex h-14 w-14 shrink-0 items-center justify-center">
       <span
         aria-hidden="true"
-        className="absolute inset-[5px] rounded-full border transition-all duration-700"
+        className="absolute inset-[7px] rounded-full border transition-all duration-700"
         style={{
           borderColor: active
-            ? 'rgba(249, 216, 159, 0.78)'
-            : 'rgba(232, 194, 132, 0.32)',
+            ? 'rgba(249, 222, 176, 0.86)'
+            : 'rgba(239, 201, 139, 0.46)',
           boxShadow: active
-            ? '0 0 0 1px rgba(249,216,159,0.12), 0 0 28px rgba(211,137,62,0.38)'
-            : '0 0 16px rgba(181,118,58,0.18)',
+            ? '0 0 0 1px rgba(249,216,159,0.16), 0 0 34px rgba(219,145,68,0.48)'
+            : '0 0 22px rgba(190,123,61,0.28)',
         }}
       />
       {active && (
@@ -27,58 +27,58 @@ function StarMark({ active = false }) {
       )}
       <motion.span
         aria-hidden="true"
-        className="absolute h-16 w-16 rounded-full blur-[16px]"
+        className="absolute h-24 w-24 rounded-full blur-[20px]"
         style={{
           background:
-            'radial-gradient(circle, rgba(247,216,166,0.66) 0%, rgba(206,133,65,0.18) 38%, rgba(206,133,65,0) 72%)',
+            'radial-gradient(circle, rgba(250,226,183,0.7) 0%, rgba(214,139,63,0.24) 38%, rgba(206,133,65,0) 72%)',
         }}
         animate={{
-          opacity: active ? [0.78, 1, 0.78] : [0.42, 0.58, 0.42],
+          opacity: active ? [0.84, 1, 0.84] : [0.5, 0.68, 0.5],
           scale: active ? [1, 1.08, 1] : [0.96, 1.04, 0.96],
         }}
         transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut' }}
       />
       <span
         aria-hidden="true"
-        className="absolute h-px w-8 origin-center"
+        className="absolute h-px w-11 origin-center"
         style={{
           background:
-            'linear-gradient(90deg, transparent, rgba(244,218,174,0.5), transparent)',
+            'linear-gradient(90deg, transparent, rgba(247,224,185,0.72), transparent)',
           filter: 'blur(0.2px)',
         }}
       />
       <span
         aria-hidden="true"
-        className="absolute h-8 w-px origin-center"
+        className="absolute h-11 w-px origin-center"
         style={{
           background:
-            'linear-gradient(180deg, transparent, rgba(244,218,174,0.5), transparent)',
+            'linear-gradient(180deg, transparent, rgba(247,224,185,0.72), transparent)',
           filter: 'blur(0.2px)',
         }}
       />
       <span
         aria-hidden="true"
-        className="absolute h-px w-6 origin-center rotate-45"
+        className="absolute h-px w-8 origin-center rotate-45"
         style={{
           background:
-            'linear-gradient(90deg, transparent, rgba(229,176,104,0.36), transparent)',
+            'linear-gradient(90deg, transparent, rgba(230,174,100,0.46), transparent)',
         }}
       />
       <span
         aria-hidden="true"
-        className="absolute h-px w-6 origin-center -rotate-45"
+        className="absolute h-px w-8 origin-center -rotate-45"
         style={{
           background:
-            'linear-gradient(90deg, transparent, rgba(229,176,104,0.36), transparent)',
+            'linear-gradient(90deg, transparent, rgba(230,174,100,0.46), transparent)',
         }}
       />
       <svg
         viewBox="0 0 24 24"
-        className="relative h-[15px] w-[15px]"
+        className="relative h-[19px] w-[19px]"
         aria-hidden="true"
         style={{
           filter:
-            'drop-shadow(0 0 2px rgba(255,241,210,0.88)) drop-shadow(0 0 8px rgba(222,160,86,0.66))',
+            'drop-shadow(0 0 3px rgba(255,244,220,0.95)) drop-shadow(0 0 11px rgba(226,162,86,0.78))',
         }}
       >
         <path
@@ -101,9 +101,9 @@ export default function FloatingStar({
   const labelRight = side === 'right'
   const isActive = activeStarId === star.id
   const buttonTransform = labelRight
-    ? 'translate(-30px, -50%)'
-    : 'translate(calc(-100% + 30px), -50%)'
-  const transformOrigin = labelRight ? '30px 50%' : 'calc(100% - 30px) 50%'
+    ? 'translate(-40px, -50%)'
+    : 'translate(calc(-100% + 40px), -50%)'
+  const transformOrigin = labelRight ? '40px 50%' : 'calc(100% - 40px) 50%'
 
   return (
     <motion.div
@@ -138,13 +138,13 @@ export default function FloatingStar({
         disabled={isHidden}
         onClick={(event) => onSelect(star, event)}
         aria-label={`Open ${star.title}`}
-        className="group absolute flex min-h-11 min-w-11 items-center rounded-full"
+        className="group absolute flex min-h-14 min-w-14 items-center rounded-full"
         style={{
           top: 0,
           left: 0,
           transform: buttonTransform,
           flexDirection: labelRight ? 'row' : 'row-reverse',
-          padding: '8px 10px',
+          padding: '10px 12px',
         }}
       >
         <motion.span
@@ -171,11 +171,11 @@ export default function FloatingStar({
               labelRight ? 'ml-2 items-start text-left' : 'mr-2 items-end text-right'
             }`}
             style={{
-              boxShadow: '0 0 18px rgba(5,8,13,0.12)',
+              boxShadow: '0 0 20px rgba(5,8,13,0.16)',
             }}
           >
             <span
-              className="star-label-title font-serif text-[16px] leading-tight transition-colors duration-500 sm:text-[19px]"
+              className="star-label-title font-serif text-[18px] leading-tight transition-colors duration-500 sm:text-[22px]"
               style={{
                 fontFamily: '"Playfair Display", Georgia, serif',
                 color: 'rgba(242, 226, 201, 0.9)',
@@ -185,16 +185,18 @@ export default function FloatingStar({
             >
               {star.title}
             </span>
-            <span
-              className="star-label-subtitle mt-0.5 font-serif italic text-[12px] transition-colors duration-500 sm:text-[14px]"
-              style={{
-                color: 'rgba(226, 198, 158, 0.56)',
-                textShadow: '0 1px 7px rgba(0,0,0,0.82)',
-                letterSpacing: '0.02em',
-              }}
-            >
-              {star.subtitle}
-            </span>
+            {star.subtitle && (
+              <span
+                className="star-label-subtitle mt-0.5 font-serif italic text-[13px] transition-colors duration-500 sm:text-[15px]"
+                style={{
+                  color: 'rgba(226, 198, 158, 0.56)',
+                  textShadow: '0 1px 7px rgba(0,0,0,0.82)',
+                  letterSpacing: '0.02em',
+                }}
+              >
+                {star.subtitle}
+              </span>
+            )}
           </span>
         </motion.span>
       </button>

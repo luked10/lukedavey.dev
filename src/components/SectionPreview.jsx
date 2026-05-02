@@ -5,6 +5,7 @@ import VignetteOverlay from './VignetteOverlay'
 
 export default function SectionPreview({ section, onBack }) {
   const [imageMissing, setImageMissing] = useState(false)
+  const isJournal = section.id === 'journal'
 
   useEffect(() => {
     setImageMissing(false)
@@ -31,6 +32,7 @@ export default function SectionPreview({ section, onBack }) {
           src={section.background}
           alt=""
           className="absolute inset-0 z-0 h-full w-full object-cover"
+          style={{ filter: 'brightness(1.12) saturate(1.05)' }}
           draggable={false}
           initial={{ opacity: 0, scale: 1.025 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -50,7 +52,20 @@ export default function SectionPreview({ section, onBack }) {
         </div>
       )}
 
-      <div aria-hidden="true" className="absolute inset-0 z-10 bg-black/35" />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-10"
+        style={{ background: 'rgba(0, 0, 0, 0.18)' }}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-10"
+        style={{
+          background:
+            'radial-gradient(circle at 70% 42%, rgba(244, 181, 98, 0.16) 0%, rgba(244, 181, 98, 0.08) 18%, rgba(244, 181, 98, 0) 42%)',
+          mixBlendMode: 'screen',
+        }}
+      />
       <VignetteOverlay />
       <GrainOverlay />
       <div
@@ -58,7 +73,7 @@ export default function SectionPreview({ section, onBack }) {
         className="absolute inset-0 z-10"
         style={{
           background:
-            'linear-gradient(90deg, rgba(5,5,14,0.48) 0%, rgba(5,5,14,0.12) 48%, rgba(5,5,14,0.34) 100%)',
+            'linear-gradient(90deg, rgba(5,5,14,0.24) 0%, rgba(5,5,14,0.04) 48%, rgba(5,5,14,0.22) 100%)',
         }}
       />
 
@@ -70,9 +85,17 @@ export default function SectionPreview({ section, onBack }) {
         Back to home
       </button>
 
-      <div className="relative z-20 flex min-h-screen items-end px-6 pb-10 pt-24 sm:px-10 sm:pb-12 md:p-16">
+      <div
+        className={`relative z-20 flex min-h-screen items-end px-6 pt-24 sm:px-10 md:px-16 ${
+          isJournal
+            ? 'pb-[15vh] sm:pb-[16vh] md:pb-[17vh]'
+            : 'pb-10 sm:pb-12 md:pb-16'
+        }`}
+      >
         <motion.div
-          className="max-w-xl"
+          className={
+            isJournal ? 'max-w-xl -translate-x-4 sm:-translate-x-5' : 'max-w-xl'
+          }
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.72, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
@@ -83,51 +106,67 @@ export default function SectionPreview({ section, onBack }) {
 
           <h1
             id="section-preview-title"
-            className="font-serif text-6xl leading-none text-[#f4ead8] sm:text-7xl md:text-8xl"
+            className={`font-serif leading-none text-[#f4ead8] ${
+              isJournal
+                ? 'text-[clamp(5.4rem,11vw,9rem)]'
+                : 'text-6xl sm:text-7xl md:text-8xl'
+            }`}
           >
             {section.title}
           </h1>
 
-          <p className="mt-3 font-serif text-2xl italic text-[#f4ead8]/75">
-            {section.subtitle}
-          </p>
+          {section.subtitle && (
+            <p className="mt-3 font-serif text-2xl italic text-[#f4ead8]/75">
+              {section.subtitle}
+            </p>
+          )}
 
-          <p className="mt-6 max-w-md text-base leading-7 text-[#f4ead8]/75">
+          <p
+            className={
+              isJournal
+                ? 'mt-4 max-w-md font-serif text-2xl italic leading-snug text-[#f4ead8]/75'
+                : 'mt-6 max-w-md text-base leading-7 text-[#f4ead8]/75'
+            }
+          >
             {section.description}
           </p>
 
-          <div className="mt-8 grid gap-3">
-            {section.links?.map((link) => (
-              <div
-                key={link.label}
-                className="rounded-xl border border-[#f4ead8]/12 bg-black/25 px-4 py-3 backdrop-blur-md"
+          {!isJournal && (
+            <div className="mt-8 grid gap-3">
+              {section.links?.map((link) => (
+                <div
+                  key={link.label}
+                  className="rounded-xl border border-[#f4ead8]/12 bg-black/25 px-4 py-3 backdrop-blur-md"
+                >
+                  <div className="text-xs uppercase tracking-[0.22em] text-[#f4ead8]/45">
+                    {link.label}
+                  </div>
+                  <div className="mt-1 text-sm text-[#f4ead8]/85">
+                    {link.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {!isJournal && (
+            <div className="mt-8 flex flex-wrap gap-4">
+              <a
+                href={section.route}
+                className="rounded-full border border-[#f4ead8]/35 px-6 py-3 text-xs uppercase tracking-[0.22em] text-[#f4ead8] transition hover:bg-[#f4ead8] hover:text-black"
               >
-                <div className="text-xs uppercase tracking-[0.22em] text-[#f4ead8]/45">
-                  {link.label}
-                </div>
-                <div className="mt-1 text-sm text-[#f4ead8]/85">
-                  {link.value}
-                </div>
-              </div>
-            ))}
-          </div>
+                {section.buttonLabel} →
+              </a>
 
-          <div className="mt-8 flex flex-wrap gap-4">
-            <a
-              href={section.route}
-              className="rounded-full border border-[#f4ead8]/35 px-6 py-3 text-xs uppercase tracking-[0.22em] text-[#f4ead8] transition hover:bg-[#f4ead8] hover:text-black"
-            >
-              {section.buttonLabel} →
-            </a>
-
-            <button
-              type="button"
-              onClick={onBack}
-              className="rounded-full border border-[#f4ead8]/15 px-6 py-3 text-xs uppercase tracking-[0.22em] text-[#f4ead8]/65 transition hover:text-[#f4ead8]"
-            >
-              Back
-            </button>
-          </div>
+              <button
+                type="button"
+                onClick={onBack}
+                className="rounded-full border border-[#f4ead8]/15 px-6 py-3 text-xs uppercase tracking-[0.22em] text-[#f4ead8]/65 transition hover:text-[#f4ead8]"
+              >
+                Back
+              </button>
+            </div>
+          )}
         </motion.div>
       </div>
     </motion.section>

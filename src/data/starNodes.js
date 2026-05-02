@@ -13,7 +13,7 @@ export const starNodes = [
   {
     id: "journal",
     title: "Journal",
-    subtitle: "late thoughts",
+    subtitle: "",
     content: "Longer reflections.",
     x: "24%",
     y: "15%",

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is `desiderium`, a React + Vite personal homepage. The experience is a cinematic, full-screen memory/constellation interface using Tailwind CSS v4 and Motion for React (`motion/react`). Keep changes minimal, atmospheric, and performance-conscious.
+This is `lukedavey-dev`, a React + Vite personal homepage. The experience is a cinematic, full-screen memory/constellation interface using Tailwind CSS v4 and Motion for React (`motion/react`). Keep changes minimal, atmospheric, and performance-conscious.
 
 ## Tech Stack
 

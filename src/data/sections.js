@@ -2,30 +2,26 @@ export const sections = {
   journal: {
     id: "journal",
     title: "Journal",
-    subtitle: "late thoughts",
-    eyebrow: "desiderium / journal",
-    description: "A space for the things I think about when the world gets quiet.",
+    subtitle: "",
+    eyebrow: "Journal",
+    description: "some thoughts",
     background: "/journal.png",
     buttonLabel: "Open Journal",
     route: "/journal",
-    links: [
-      { label: "Recent Entries", value: "Things I Almost Said" },
-      { label: "Mood", value: "late night static" },
-      { label: "Archive", value: "kept thoughts" }
-    ]
+    links: []
   },
 
   photography: {
     id: "photography",
     title: "Photography",
     subtitle: "moments",
-    eyebrow: "desiderium / photography",
+    eyebrow: "lukedavey / photography",
     description: "Visual fragments, edits, and the little scenes I wanted to keep.",
     background: "/camera.png",
     buttonLabel: "Open Photography",
     route: "/photography",
     links: [
-      { label: "Handle", value: "@yourphotohandle" },
+      { label: "Handle", value: "@luke_photography_999" },
       { label: "Portfolio", value: "your portfolio link" },
       { label: "Camera", value: "Sony a6400" }
     ]
@@ -35,7 +31,7 @@ export const sections = {
     id: "listening",
     title: "Listening",
     subtitle: "what moves me",
-    eyebrow: "desiderium / listening",
+    eyebrow: "lukedavey / listening",
     description: "Songs, artists, playlists, and sounds attached to memories.",
     background: "/listening.png",
     buttonLabel: "Open Listening",
@@ -51,7 +47,7 @@ export const sections = {
     id: "about",
     title: "About Me",
     subtitle: "who I am",
-    eyebrow: "desiderium / about",
+    eyebrow: "lukedavey / about",
     description: "A soft introduction to the person behind the site.",
     background: "/dream-bg.webp",
     buttonLabel: "Open About",
@@ -66,7 +62,7 @@ export const sections = {
     id: "archive",
     title: "Archive",
     subtitle: "kept thoughts",
-    eyebrow: "desiderium / archive",
+    eyebrow: "lukedavey / archive",
     description: "Older entries, drafts, photo fragments, and half-finished thoughts.",
     background: "/dream-bg.webp",
     buttonLabel: "Open Archive",
@@ -81,7 +77,7 @@ export const sections = {
     id: "today",
     title: "Today",
     subtitle: "current log",
-    eyebrow: "desiderium / today",
+    eyebrow: "lukedavey / today",
     description: "A small snapshot of what life feels like right now.",
     background: "/dream-bg.webp",
     buttonLabel: "Open Today",

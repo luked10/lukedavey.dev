@@ -9,7 +9,6 @@ import ConstellationLines from './ConstellationLines'
 import MemoryTransitionOverlay from './MemoryTransitionOverlay'
 import SectionPreview from './SectionPreview'
 
-const navItems = ['Journal', 'Photography', 'Listening', 'About', 'Archive', 'Today']
 const defaultBackgroundImage = '/ld.webp'
 
 // Side determines which side of the star the label sits on
@@ -76,7 +75,7 @@ export default function DreamHero() {
   return (
     <>
       <section
-        aria-label="desiderium — fragments of me"
+        aria-label="lukedavey — fragments of me"
         className="relative h-full w-full overflow-hidden"
       >
         {/* z-0 background image */}
@@ -124,9 +123,9 @@ export default function DreamHero() {
         {/* z-20 constellation arcs (under stars and labels) */}
         <ConstellationLines isHidden={uiHidden} />
 
-        {/* z-40 nav + brand */}
+        {/* z-40 brand */}
         <motion.header
-          className="absolute inset-x-0 top-0 z-40 flex items-center justify-between px-6 pt-6 sm:px-12 sm:pt-8"
+          className="absolute left-0 top-0 z-40 flex items-center px-6 pt-6 sm:px-12 sm:pt-8"
           aria-hidden={uiHidden}
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: uiHidden ? 0 : 1, y: uiHidden ? -8 : 0 }}
@@ -146,49 +145,8 @@ export default function DreamHero() {
               textShadow: '0 1px 10px rgba(0,0,0,0.7)',
             }}
           >
-            desiderium
+            lukedavey
           </span>
-          <nav aria-label="Primary">
-            <ul className="hidden xl:flex items-center gap-8">
-              {navItems.map((item) => (
-                <li key={item}>
-                  <button
-                    type="button"
-                    className="font-sans uppercase transition-colors duration-500"
-                    style={{
-                      color: 'rgba(244, 234, 216, 0.85)',
-                      fontSize: 'clamp(0.85rem, 1vw, 1.05rem)',
-                      letterSpacing: '0.18em',
-                      textShadow: '0 1px 8px rgba(0,0,0,0.7)',
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.color = 'rgba(244, 234, 216, 1)')
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.color = 'rgba(244, 234, 216, 0.85)')
-                    }
-                    onClick={(event) => {
-                      const section = starNodes.find(
-                        (star) => star.id === item.toLowerCase(),
-                      )
-                      if (section) handleSelectSection(section, event)
-                    }}
-                  >
-                    {item}
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <span
-              className="xl:hidden text-[12px] uppercase tracking-[0.3em]"
-              style={{
-                color: 'rgba(245, 237, 222, 0.6)',
-                textShadow: '0 1px 6px rgba(0,0,0,0.7)',
-              }}
-            >
-              menu
-            </span>
-          </nav>
         </motion.header>
 
         {/* z-40 headline + cta */}
