@@ -6,6 +6,7 @@ export const starNodes = [
     title: "About Me",
     subtitle: "who I am",
     content: "A soft introduction.",
+    image: "/ld.webp",
     x: "13%",
     y: "50%",
     delay: 0
@@ -15,6 +16,7 @@ export const starNodes = [
     title: "Journal",
     subtitle: "late thoughts",
     content: "Longer reflections.",
+    image: "/journal.webp",
     x: "24%",
     y: "15%",
     delay: 0.3
@@ -24,6 +26,7 @@ export const starNodes = [
     title: "Photography",
     subtitle: "moments",
     content: "Visual memories.",
+    image: "/camera.webp",
     x: "76%",
     y: "16%",
     delay: 0.6
@@ -33,6 +36,7 @@ export const starNodes = [
     title: "Listening",
     subtitle: "what moves me",
     content: "Music + writing.",
+    image: "/listening.webp",
     x: "88%",
     y: "47%",
     delay: 0.9
@@ -42,6 +46,7 @@ export const starNodes = [
     title: "Today",
     subtitle: "current log",
     content: "Daily thoughts.",
+    image: "/ld.webp",
     x: "80%",
     y: "70%",
     delay: 1.2
@@ -51,6 +56,7 @@ export const starNodes = [
     title: "Archive",
     subtitle: "kept thoughts",
     content: "Older entries.",
+    image: "/ld.webp",
     x: "90%",
     y: "88%",
     delay: 1.5

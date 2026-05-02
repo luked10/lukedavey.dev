@@ -9,6 +9,7 @@ import MemoryTransitionOverlay from './MemoryTransitionOverlay'
 import DetailPage from './DetailPage'
 
 const navItems = ['About', 'Journal', 'Photography', 'Listening', 'Archive']
+const defaultBackgroundImage = '/ld.webp'
 
 // Side determines which side of the star the label sits on
 const labelSide = {
@@ -28,6 +29,10 @@ export default function DreamHero() {
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [transitionOrigin, setTransitionOrigin] = useState(null)
   const uiHidden = isTransitioning || Boolean(detailSection)
+  const activeBackgroundImage =
+    detailSection?.image ||
+    (isTransitioning ? selectedSection?.image : null) ||
+    defaultBackgroundImage
 
   useEffect(() => {
     return () => {
@@ -83,14 +88,14 @@ export default function DreamHero() {
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
         >
           <img
-            src="/ld.webp"
+            src={activeBackgroundImage}
             alt=""
             aria-hidden="true"
             className="absolute inset-0 h-full w-full scale-105 object-cover opacity-75 blur-2xl"
             draggable={false}
           />
           <img
-            src="/ld.webp"
+            src={activeBackgroundImage}
             alt=""
             aria-hidden="true"
             className="absolute inset-0 h-full w-full object-cover object-center"
@@ -140,8 +145,8 @@ export default function DreamHero() {
             <ul className="hidden md:flex items-center gap-9">
               {navItems.map((item) => (
                 <li key={item}>
-                  <a
-                    href={`#${item.toLowerCase()}`}
+                  <button
+                    type="button"
                     className="font-serif text-[17px] transition-colors duration-500"
                     style={{
                       fontFamily: '"Playfair Display", Georgia, serif',
@@ -154,9 +159,15 @@ export default function DreamHero() {
                     onMouseLeave={(e) =>
                       (e.currentTarget.style.color = 'rgba(245, 237, 222, 0.78)')
                     }
+                    onClick={(event) => {
+                      const section = starNodes.find(
+                        (star) => star.id === item.toLowerCase(),
+                      )
+                      if (section) handleSelectSection(section, event)
+                    }}
                   >
                     {item}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
