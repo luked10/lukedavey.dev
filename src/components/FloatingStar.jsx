@@ -2,37 +2,88 @@ import { motion } from 'motion/react'
 
 function StarMark({ active = false }) {
   return (
-    <span className="relative flex h-8 w-8 items-center justify-center">
+    <span className="relative flex h-11 w-11 items-center justify-center">
       {/* Outer thin ring */}
       <span
         aria-hidden="true"
-        className="absolute inset-0 rounded-full border transition-all duration-700"
+        className="absolute inset-1 rounded-full border transition-all duration-700"
         style={{
           borderColor: active
-            ? 'rgba(240, 201, 138, 0.65)'
-            : 'rgba(240, 201, 138, 0.3)',
+            ? 'rgba(255, 222, 170, 0.82)'
+            : 'rgba(255, 222, 170, 0.48)',
+          boxShadow: active
+            ? '0 0 0 1px rgba(255,222,170,0.12), 0 0 32px rgba(240,178,91,0.42)'
+            : '0 0 22px rgba(240,178,91,0.22)',
         }}
       />
+      {active && (
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 rounded-full border"
+          style={{
+            borderColor: 'rgba(255, 222, 170, 0.22)',
+            transform: 'scale(1.34)',
+          }}
+        />
+      )}
       {/* Soft amber glow */}
       <span
         aria-hidden="true"
-        className="absolute h-14 w-14 rounded-full blur-[12px] opacity-70 transition-opacity duration-700"
+        className="absolute h-20 w-20 rounded-full blur-[18px] opacity-90"
         style={{
           background:
-            'radial-gradient(circle, rgba(255,225,170,0.7) 0%, rgba(240,201,138,0) 70%)',
+            'radial-gradient(circle, rgba(255,232,184,0.9) 0%, rgba(240,172,83,0.3) 34%, rgba(240,201,138,0) 72%)',
         }}
       />
-      {/* Bright luminous core (sparkle dot) */}
       <span
         aria-hidden="true"
-        className="relative h-[7px] w-[7px] rounded-full"
+        className="absolute h-px w-10 origin-center"
         style={{
           background:
-            'radial-gradient(circle, #ffffff 0%, #fff3d6 45%, #f0c98a 100%)',
-          boxShadow:
-            '0 0 6px rgba(255, 240, 210, 1), 0 0 14px rgba(255, 220, 160, 0.85), 0 0 26px rgba(240, 201, 138, 0.55)',
+            'linear-gradient(90deg, transparent, rgba(255,238,204,0.82), transparent)',
+          filter: 'blur(0.2px)',
         }}
       />
+      <span
+        aria-hidden="true"
+        className="absolute h-10 w-px origin-center"
+        style={{
+          background:
+            'linear-gradient(180deg, transparent, rgba(255,238,204,0.82), transparent)',
+          filter: 'blur(0.2px)',
+        }}
+      />
+      <span
+        aria-hidden="true"
+        className="absolute h-px w-7 origin-center rotate-45"
+        style={{
+          background:
+            'linear-gradient(90deg, transparent, rgba(255,216,158,0.58), transparent)',
+        }}
+      />
+      <span
+        aria-hidden="true"
+        className="absolute h-px w-7 origin-center -rotate-45"
+        style={{
+          background:
+            'linear-gradient(90deg, transparent, rgba(255,216,158,0.58), transparent)',
+        }}
+      />
+      {/* Five-point star, not a dot */}
+      <svg
+        viewBox="0 0 24 24"
+        className="relative h-[19px] w-[19px]"
+        aria-hidden="true"
+        style={{
+          filter:
+            'drop-shadow(0 0 3px rgba(255,250,230,1)) drop-shadow(0 0 10px rgba(255,218,150,0.95)) drop-shadow(0 0 20px rgba(240,170,85,0.9))',
+        }}
+      >
+        <path
+          d="M12 1.7 14.65 8.55 22 8.95 16.3 13.6 18.2 20.7 12 16.75 5.8 20.7 7.7 13.6 2 8.95 9.35 8.55 12 1.7Z"
+          fill="#fff9e8"
+        />
+      </svg>
     </span>
   )
 }
@@ -46,7 +97,7 @@ export default function FloatingStar({ star, onSelect, side = 'right' }) {
       onClick={() => onSelect(star)}
       aria-label={`Open ${star.title}`}
       data-star-id={star.id}
-      className="group absolute z-30 flex items-center"
+      className="group floating-star absolute z-30 flex items-center"
       style={{
         left: star.x,
         top: star.y,
@@ -84,7 +135,7 @@ export default function FloatingStar({ star, onSelect, side = 'right' }) {
         }`}
       >
         <span
-          className="font-serif text-[16px] sm:text-[18px] leading-tight transition-colors duration-500"
+          className="font-serif text-[16px] leading-tight transition-colors duration-500 sm:text-[19px]"
           style={{
             fontFamily: '"Playfair Display", Georgia, serif',
             color: 'rgba(245, 237, 222, 0.95)',
@@ -95,7 +146,7 @@ export default function FloatingStar({ star, onSelect, side = 'right' }) {
           {star.title}
         </span>
         <span
-          className="mt-0.5 text-[11px] sm:text-[12px] transition-colors duration-500"
+          className="mt-0.5 font-serif italic text-[12px] transition-colors duration-500 sm:text-[14px]"
           style={{
             color: 'rgba(245, 237, 222, 0.55)',
             textShadow: '0 1px 5px rgba(0,0,0,0.7)',

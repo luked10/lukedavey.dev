@@ -58,3 +58,47 @@ a:focus-visible {
     transition-duration: 0.001ms !important;
   }
 }
+
+@media (max-width: 640px) {
+  .floating-star {
+    padding: 6px !important;
+  }
+
+  .floating-star[data-star-id="about"] {
+    left: 18% !important;
+    top: 34% !important;
+  }
+
+  .floating-star[data-star-id="journal"] {
+    left: 26% !important;
+    top: 17% !important;
+  }
+
+  .floating-star[data-star-id="photography"] {
+    left: 82% !important;
+    top: 24% !important;
+  }
+
+  .floating-star[data-star-id="listening"] {
+    left: 82% !important;
+    top: 43% !important;
+  }
+
+  .floating-star[data-star-id="today"] {
+    left: 73% !important;
+    top: 58% !important;
+  }
+
+  .floating-star[data-star-id="archive"] {
+    left: 78% !important;
+    top: 73% !important;
+  }
+
+  .floating-star > span:last-child > span:first-child {
+    font-size: 13px !important;
+  }
+
+  .floating-star > span:last-child > span:last-child {
+    display: none;
+  }
+}
