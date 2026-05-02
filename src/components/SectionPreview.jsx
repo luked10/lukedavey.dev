@@ -21,7 +21,7 @@ export default function SectionPreview({ section, onBack }) {
   return (
     <motion.section
       aria-labelledby="section-preview-title"
-      className="absolute inset-0 z-50 min-h-screen overflow-hidden bg-black text-[#f4ead8]"
+      className="absolute inset-0 z-50 h-full overflow-hidden bg-black text-[#f4ead8]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -88,7 +88,7 @@ export default function SectionPreview({ section, onBack }) {
       </button>
 
       <div
-        className={`relative z-20 flex min-h-screen items-end px-6 pt-24 sm:px-10 md:px-16 ${
+        className={`relative z-20 flex h-full items-end px-6 pt-24 sm:px-10 md:px-16 ${
           isJournal
             ? 'pb-[15vh] sm:pb-[16vh] md:pb-[17vh]'
             : 'pb-10 sm:pb-12 md:pb-16'
