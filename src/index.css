@@ -60,10 +60,6 @@ a:focus-visible {
 }
 
 @media (max-width: 640px) {
-  .floating-star {
-    padding: 6px !important;
-  }
-
   .floating-star[data-star-id="about"] {
     left: 18% !important;
     top: 34% !important;
@@ -94,11 +90,11 @@ a:focus-visible {
     top: 73% !important;
   }
 
-  .floating-star > span:last-child > span:first-child {
+  .floating-star .star-label-title {
     font-size: 13px !important;
   }
 
-  .floating-star > span:last-child > span:last-child {
+  .floating-star .star-label-subtitle {
     display: none;
   }
 }

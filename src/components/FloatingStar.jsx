@@ -2,7 +2,7 @@ import { motion } from 'motion/react'
 
 function StarMark({ active = false }) {
   return (
-    <span className="relative flex h-10 w-10 items-center justify-center">
+    <span className="relative z-30 flex h-10 w-10 shrink-0 items-center justify-center">
       <span
         aria-hidden="true"
         className="absolute inset-[5px] rounded-full border transition-all duration-700"
@@ -100,27 +100,25 @@ export default function FloatingStar({
 }) {
   const labelRight = side === 'right'
   const isActive = activeStarId === star.id
+  const buttonTransform = labelRight
+    ? 'translate(-30px, -50%)'
+    : 'translate(calc(-100% + 30px), -50%)'
+  const transformOrigin = labelRight ? '30px 50%' : 'calc(100% - 30px) 50%'
 
   return (
-    <motion.button
-      type="button"
-      onClick={(event) => onSelect(star, event)}
-      aria-label={`Open ${star.title}`}
+    <motion.div
       data-star-id={star.id}
-      className="group floating-star absolute z-30 flex items-center"
+      className="floating-star absolute z-30"
+      aria-hidden={isHidden}
       style={{
         left: star.x,
         top: star.y,
-        transform: 'translate(-50%, -50%)',
-        flexDirection: labelRight ? 'row' : 'row-reverse',
-        minWidth: 44,
-        minHeight: 44,
-        padding: '8px 10px',
+        pointerEvents: isHidden ? 'none' : 'auto',
       }}
       initial={{ opacity: 0, scale: 0.7 }}
       animate={{
         opacity: isHidden ? 0 : 1,
-        scale: isTransitioning && isActive ? [1, 1.2, 1.04] : 1,
+        scale: 1,
       }}
       transition={{
         opacity: {
@@ -129,44 +127,77 @@ export default function FloatingStar({
           ease: 'easeOut',
         },
         scale: {
-          duration: isTransitioning && isActive ? 0.16 : 1.6,
-          delay: isTransitioning && isActive ? 0 : star.delay,
+          duration: 1.6,
+          delay: star.delay,
           ease: 'easeOut',
         },
       }}
-      whileHover={{ scale: 1.06 }}
-      whileTap={{ scale: 0.95 }}
     >
-      <StarMark active={isActive} />
-
-      {/* Label block */}
-      <span
-        className={`flex flex-col whitespace-nowrap ${
-          labelRight ? 'items-start text-left ml-3' : 'items-end text-right mr-3'
-        }`}
+      <button
+        type="button"
+        disabled={isHidden}
+        onClick={(event) => onSelect(star, event)}
+        aria-label={`Open ${star.title}`}
+        className="group absolute flex min-h-11 min-w-11 items-center rounded-full"
+        style={{
+          top: 0,
+          left: 0,
+          transform: buttonTransform,
+          flexDirection: labelRight ? 'row' : 'row-reverse',
+          padding: '8px 10px',
+        }}
       >
-        <span
-          className="font-serif text-[16px] leading-tight transition-colors duration-500 sm:text-[19px]"
+        <motion.span
+          className="flex items-center"
           style={{
-            fontFamily: '"Playfair Display", Georgia, serif',
-            color: 'rgba(242, 226, 201, 0.88)',
-            textShadow: '0 1px 10px rgba(0,0,0,0.75)',
-            fontWeight: 400,
+            flexDirection: labelRight ? 'row' : 'row-reverse',
+            transformOrigin,
           }}
-        >
-          {star.title}
-        </span>
-        <span
-          className="mt-0.5 font-serif italic text-[12px] transition-colors duration-500 sm:text-[14px]"
-          style={{
-            color: 'rgba(226, 198, 158, 0.5)',
-            textShadow: '0 1px 7px rgba(0,0,0,0.78)',
-            letterSpacing: '0.02em',
+          animate={{
+            scale: isTransitioning && isActive ? [1, 1.18, 1.04] : 1,
           }}
+          transition={{
+            duration: isTransitioning && isActive ? 0.16 : 0.5,
+            ease: 'easeOut',
+          }}
+          whileHover={{ scale: 1.06 }}
+          whileTap={{ scale: 0.95 }}
         >
-          {star.subtitle}
-        </span>
-      </span>
-    </motion.button>
+          <StarMark active={isActive} />
+
+          {/* Label block */}
+          <span
+            className={`relative z-40 flex flex-col whitespace-nowrap rounded-lg bg-[rgba(5,8,13,0.22)] px-2 py-1 backdrop-blur-[3px] transition-colors duration-500 ${
+              labelRight ? 'ml-2 items-start text-left' : 'mr-2 items-end text-right'
+            }`}
+            style={{
+              boxShadow: '0 0 18px rgba(5,8,13,0.12)',
+            }}
+          >
+            <span
+              className="star-label-title font-serif text-[16px] leading-tight transition-colors duration-500 sm:text-[19px]"
+              style={{
+                fontFamily: '"Playfair Display", Georgia, serif',
+                color: 'rgba(242, 226, 201, 0.9)',
+                textShadow: '0 1px 10px rgba(0,0,0,0.82)',
+                fontWeight: 400,
+              }}
+            >
+              {star.title}
+            </span>
+            <span
+              className="star-label-subtitle mt-0.5 font-serif italic text-[12px] transition-colors duration-500 sm:text-[14px]"
+              style={{
+                color: 'rgba(226, 198, 158, 0.56)',
+                textShadow: '0 1px 7px rgba(0,0,0,0.82)',
+                letterSpacing: '0.02em',
+              }}
+            >
+              {star.subtitle}
+            </span>
+          </span>
+        </motion.span>
+      </button>
+    </motion.div>
   )
 }

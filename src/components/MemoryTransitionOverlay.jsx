@@ -5,7 +5,7 @@ export default function MemoryTransitionOverlay({ origin }) {
   const y = origin?.y ?? window.innerHeight / 2
 
   return (
-    <motion.div className="pointer-events-none fixed inset-0 z-40 overflow-hidden">
+    <motion.div className="pointer-events-none fixed inset-0 z-[60] overflow-hidden">
       <motion.div
         aria-hidden="true"
         className="absolute h-[82vmax] w-[82vmax] rounded-full"
