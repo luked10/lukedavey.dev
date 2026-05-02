@@ -32,7 +32,7 @@ export default function SectionPreview({ section, onBack }) {
           src={section.background}
           alt=""
           className="absolute inset-0 z-0 h-full w-full object-cover"
-          style={{ filter: 'brightness(1.12) saturate(1.05)' }}
+          style={{ filter: 'brightness(1.12) saturate(1.05)', objectPosition: section.objectPosition ?? 'center' }}
           draggable={false}
           initial={{ opacity: 0, scale: 1.025 }}
           animate={{ opacity: 1, scale: 1 }}

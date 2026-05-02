@@ -6,6 +6,7 @@ export const sections = {
     eyebrow: "Journal",
     description: "some thoughts",
     background: "/journal.png",
+    objectPosition: "60% center",
     buttonLabel: "Open Journal",
     route: "/journal",
     links: []
@@ -18,6 +19,7 @@ export const sections = {
     eyebrow: "lukedavey / photography",
     description: "",
     background: "/camera.png",
+    objectPosition: "55% center",
     buttonLabel: "Open Photography",
     route: "/photography",
     links: [
@@ -34,6 +36,7 @@ export const sections = {
     eyebrow: "lukedavey / listening",
     description: "Songs, artists, playlists, and sounds attached to memories.",
     background: "/listening.png",
+    objectPosition: "52% center",
     buttonLabel: "Open Listening",
     route: "/listening",
     links: [
