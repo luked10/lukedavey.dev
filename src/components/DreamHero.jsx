@@ -161,6 +161,7 @@ export default function DreamHero() {
           }}
           style={{ pointerEvents: uiHidden ? 'none' : 'auto' }}
         >
+          {/*
           <h1
             className="font-serif tracking-tight"
             style={{
@@ -211,6 +212,7 @@ export default function DreamHero() {
               →
             </span>
           </a>
+          */}
         </motion.div>
 
         {/* z-30 floating stars, z-40 labels within each control */}

@@ -121,15 +121,17 @@ export default function SectionPreview({ section, onBack }) {
             </p>
           )}
 
-          <p
-            className={
-              isJournal
-                ? 'mt-4 max-w-md font-serif text-2xl italic leading-snug text-[#f4ead8]/75'
-                : 'mt-6 max-w-md text-base leading-7 text-[#f4ead8]/75'
-            }
-          >
-            {section.description}
-          </p>
+          {section.description && (
+            <p
+              className={
+                isJournal
+                  ? 'mt-4 max-w-md font-serif text-2xl italic leading-snug text-[#f4ead8]/75'
+                  : 'mt-6 max-w-md text-base leading-7 text-[#f4ead8]/75'
+              }
+            >
+              {section.description}
+            </p>
+          )}
 
           {!isJournal && (
             <div className="mt-8 grid gap-3">

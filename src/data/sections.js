@@ -16,13 +16,13 @@ export const sections = {
     title: "Photography",
     subtitle: "moments",
     eyebrow: "lukedavey / photography",
-    description: "Visual fragments, edits, and the little scenes I wanted to keep.",
+    description: "",
     background: "/camera.png",
     buttonLabel: "Open Photography",
     route: "/photography",
     links: [
       { label: "Handle", value: "@luke_photography_999" },
-      { label: "Portfolio", value: "your portfolio link" },
+      { label: "Portfolio", value: "coming soon" },
       { label: "Camera", value: "Sony a6400" }
     ]
   },
