@@ -15,8 +15,8 @@ const defaultBackgroundImage = '/ld.webp'
 const labelSide = {
   about: 'right',
   journal: 'right',
-  photography: 'left',
-  listening: 'left',
+  photography: 'right',
+  listening: 'right',
   today: 'left',
   archive: 'left',
 }

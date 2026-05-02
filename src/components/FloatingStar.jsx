@@ -2,17 +2,18 @@ import { motion } from 'motion/react'
 
 function StarMark({ active = false }) {
   return (
-    <span className="relative z-30 flex h-14 w-14 shrink-0 items-center justify-center">
+    <span className="relative z-30 flex h-[72px] w-[72px] shrink-0 items-center justify-center sm:h-20 sm:w-20">
       <span
         aria-hidden="true"
-        className="absolute inset-[7px] rounded-full border transition-all duration-700"
+        className="absolute inset-[9px] rounded-full border transition-all duration-700 group-hover:opacity-100"
         style={{
+          opacity: active ? 1 : 0.82,
           borderColor: active
             ? 'rgba(249, 222, 176, 0.86)'
-            : 'rgba(239, 201, 139, 0.46)',
+            : 'rgba(239, 201, 139, 0.58)',
           boxShadow: active
-            ? '0 0 0 1px rgba(249,216,159,0.16), 0 0 34px rgba(219,145,68,0.48)'
-            : '0 0 22px rgba(190,123,61,0.28)',
+            ? '0 0 0 1px rgba(249,216,159,0.2), 0 0 44px rgba(219,145,68,0.58)'
+            : '0 0 30px rgba(190,123,61,0.34)',
         }}
       />
       {active && (
@@ -27,20 +28,20 @@ function StarMark({ active = false }) {
       )}
       <motion.span
         aria-hidden="true"
-        className="absolute h-24 w-24 rounded-full blur-[20px]"
+        className="absolute h-32 w-32 rounded-full blur-[24px] transition-opacity duration-700 group-hover:opacity-100"
         style={{
           background:
-            'radial-gradient(circle, rgba(250,226,183,0.7) 0%, rgba(214,139,63,0.24) 38%, rgba(206,133,65,0) 72%)',
+            'radial-gradient(circle, rgba(255,232,192,0.82) 0%, rgba(222,148,72,0.3) 38%, rgba(206,133,65,0) 72%)',
         }}
         animate={{
-          opacity: active ? [0.84, 1, 0.84] : [0.5, 0.68, 0.5],
+          opacity: active ? [0.9, 1, 0.9] : [0.6, 0.78, 0.6],
           scale: active ? [1, 1.08, 1] : [0.96, 1.04, 0.96],
         }}
         transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut' }}
       />
       <span
         aria-hidden="true"
-        className="absolute h-px w-11 origin-center"
+        className="absolute h-px w-14 origin-center"
         style={{
           background:
             'linear-gradient(90deg, transparent, rgba(247,224,185,0.72), transparent)',
@@ -49,7 +50,7 @@ function StarMark({ active = false }) {
       />
       <span
         aria-hidden="true"
-        className="absolute h-11 w-px origin-center"
+        className="absolute h-14 w-px origin-center"
         style={{
           background:
             'linear-gradient(180deg, transparent, rgba(247,224,185,0.72), transparent)',
@@ -58,7 +59,7 @@ function StarMark({ active = false }) {
       />
       <span
         aria-hidden="true"
-        className="absolute h-px w-8 origin-center rotate-45"
+        className="absolute h-px w-10 origin-center rotate-45"
         style={{
           background:
             'linear-gradient(90deg, transparent, rgba(230,174,100,0.46), transparent)',
@@ -66,7 +67,7 @@ function StarMark({ active = false }) {
       />
       <span
         aria-hidden="true"
-        className="absolute h-px w-8 origin-center -rotate-45"
+        className="absolute h-px w-10 origin-center -rotate-45"
         style={{
           background:
             'linear-gradient(90deg, transparent, rgba(230,174,100,0.46), transparent)',
@@ -74,11 +75,11 @@ function StarMark({ active = false }) {
       />
       <svg
         viewBox="0 0 24 24"
-        className="relative h-[19px] w-[19px]"
+        className="relative h-[24px] w-[24px] sm:h-[26px] sm:w-[26px]"
         aria-hidden="true"
         style={{
           filter:
-            'drop-shadow(0 0 3px rgba(255,244,220,0.95)) drop-shadow(0 0 11px rgba(226,162,86,0.78))',
+            'drop-shadow(0 0 4px rgba(255,244,220,0.98)) drop-shadow(0 0 16px rgba(226,162,86,0.88))',
         }}
       >
         <path
@@ -101,9 +102,9 @@ export default function FloatingStar({
   const labelRight = side === 'right'
   const isActive = activeStarId === star.id
   const buttonTransform = labelRight
-    ? 'translate(-40px, -50%)'
-    : 'translate(calc(-100% + 40px), -50%)'
-  const transformOrigin = labelRight ? '40px 50%' : 'calc(100% - 40px) 50%'
+    ? 'translate(-52px, -50%)'
+    : 'translate(calc(-100% + 52px), -50%)'
+  const transformOrigin = labelRight ? '52px 50%' : 'calc(100% - 52px) 50%'
 
   return (
     <motion.div
@@ -119,6 +120,7 @@ export default function FloatingStar({
       animate={{
         opacity: isHidden ? 0 : 1,
         scale: 1,
+        y: isHidden ? 0 : [0, -(star.float || 6), 0],
       }}
       transition={{
         opacity: {
@@ -131,6 +133,12 @@ export default function FloatingStar({
           delay: star.delay,
           ease: 'easeOut',
         },
+        y: {
+          duration: star.floatDuration || 6.8,
+          delay: star.delay,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        },
       }}
     >
       <button
@@ -138,13 +146,13 @@ export default function FloatingStar({
         disabled={isHidden}
         onClick={(event) => onSelect(star, event)}
         aria-label={`Open ${star.title}`}
-        className="group absolute flex min-h-14 min-w-14 items-center rounded-full"
+        className="group absolute flex min-h-[72px] min-w-[72px] items-center rounded-full sm:min-h-20 sm:min-w-20"
         style={{
           top: 0,
           left: 0,
           transform: buttonTransform,
           flexDirection: labelRight ? 'row' : 'row-reverse',
-          padding: '10px 12px',
+          padding: '12px 14px',
         }}
       >
         <motion.span
@@ -160,7 +168,7 @@ export default function FloatingStar({
             duration: isTransitioning && isActive ? 0.16 : 0.5,
             ease: 'easeOut',
           }}
-          whileHover={{ scale: 1.06 }}
+          whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.95 }}
         >
           <StarMark active={isActive} />
@@ -175,10 +183,10 @@ export default function FloatingStar({
             }}
           >
             <span
-              className="star-label-title font-serif text-[18px] leading-tight transition-colors duration-500 sm:text-[22px]"
+              className="star-label-title font-serif text-[19px] leading-tight transition-colors duration-500 group-hover:text-[#fff1d2] sm:text-[24px]"
               style={{
                 fontFamily: '"Playfair Display", Georgia, serif',
-                color: 'rgba(242, 226, 201, 0.9)',
+                color: 'rgba(242, 226, 201, 0.94)',
                 textShadow: '0 1px 10px rgba(0,0,0,0.82)',
                 fontWeight: 400,
               }}

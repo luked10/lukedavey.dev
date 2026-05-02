@@ -57,15 +57,17 @@ export default function SectionPreview({ section, onBack }) {
         className="absolute inset-0 z-10"
         style={{ background: 'rgba(0, 0, 0, 0.18)' }}
       />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 z-10"
-        style={{
-          background:
-            'radial-gradient(circle at 70% 42%, rgba(244, 181, 98, 0.16) 0%, rgba(244, 181, 98, 0.08) 18%, rgba(244, 181, 98, 0) 42%)',
-          mixBlendMode: 'screen',
-        }}
-      />
+      {!isJournal && (
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 z-10"
+          style={{
+            background:
+              'radial-gradient(circle at 70% 42%, rgba(244, 181, 98, 0.16) 0%, rgba(244, 181, 98, 0.08) 18%, rgba(244, 181, 98, 0) 42%)',
+            mixBlendMode: 'screen',
+          }}
+        />
+      )}
       <VignetteOverlay />
       <GrainOverlay />
       <div

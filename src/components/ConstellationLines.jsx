@@ -1,117 +1,98 @@
-import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
-import { starNodes } from '../data/starNodes'
 
-const pct = (s) => parseFloat(s)
-
-const mobilePositions = {
-  about: { x: '18%', y: '34%' },
-  journal: { x: '26%', y: '17%' },
-  photography: { x: '82%', y: '24%' },
-  listening: { x: '82%', y: '43%' },
-  today: { x: '73%', y: '58%' },
-  archive: { x: '78%', y: '73%' },
-}
-
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const media = window.matchMedia('(max-width: 640px)')
-    const update = () => setIsMobile(media.matches)
-    update()
-    media.addEventListener('change', update)
-    return () => media.removeEventListener('change', update)
-  }, [])
-
-  return isMobile
-}
-
-function buildPath(points) {
-  if (points.length < 2) return ''
-  let d = `M ${points[0].x} ${points[0].y}`
-  for (let i = 1; i < points.length; i++) {
-    const p0 = points[i - 1]
-    const p1 = points[i]
-    const mx = (p0.x + p1.x) / 2
-    const my = (p0.y + p1.y) / 2
-    // Push the control point outward (away from screen center) for graceful arcs
-    const cx = 50
-    const cy = 48
-    const nx = mx - cx
-    const ny = my - cy
-    const len = Math.hypot(nx, ny) || 1
-    const lift = 8
-    const ctrlX = mx + (nx / len) * lift
-    const ctrlY = my + (ny / len) * lift
-    d += ` Q ${ctrlX} ${ctrlY} ${p1.x} ${p1.y}`
-  }
-  return d
-}
-
-function buildDesktopPaths(pointsById) {
-  const p = (id) => pointsById[id]
-  return [
-    `M ${p('about').x} ${p('about').y} C 11 40 14 27 24 15`,
-    `M ${p('journal').x} ${p('journal').y} C 38 8 57 8 76 16`,
-    `M ${p('photography').x} ${p('photography').y} C 82 22 84 36 88 47`,
-    `M ${p('listening').x} ${p('listening').y} C 84 52 78 59 80 70`,
-    `M ${p('today').x} ${p('today').y} C 83 76 88 82 90 88`,
-  ]
-}
+const tracePaths = [
+  {
+    d: 'M 25 17 C 34 19 41 25 47 33',
+    dash: '2 7',
+    width: 0.72,
+    opacity: 0.5,
+  },
+  {
+    d: 'M 14 43 C 24 39 35 39 45 44',
+    dash: '1.6 6.6',
+    width: 0.66,
+    opacity: 0.46,
+  },
+  {
+    d: 'M 18 62 C 28 58 38 55 48 54',
+    dash: '2 7',
+    width: 0.7,
+    opacity: 0.46,
+  },
+  {
+    d: 'M 38 83 C 43 77 49 69 53 60',
+    dash: '2.2 9',
+    width: 0.58,
+    opacity: 0.38,
+  },
+  {
+    d: 'M 84 44 C 76 42 67 41 59 44',
+    dash: '2 7',
+    width: 0.72,
+    opacity: 0.5,
+  },
+  {
+    d: 'M 80 73 C 72 67 64 62 56 57',
+    dash: '2 8',
+    width: 0.62,
+    opacity: 0.4,
+  },
+]
 
 export default function ConstellationLines({ isHidden = false }) {
-  const isMobile = useIsMobile()
-  const points = starNodes.map((s) => {
-    const position = isMobile ? mobilePositions[s.id] || s : s
-    return { id: s.id, x: pct(position.x), y: pct(position.y) }
-  })
-  const pointsById = Object.fromEntries(points.map((point) => [point.id, point]))
-  const paths = isMobile ? [buildPath(points)] : buildDesktopPaths(pointsById)
-
   return (
     <motion.svg
       aria-hidden="true"
       viewBox="0 0 100 100"
       preserveAspectRatio="none"
-      className="pointer-events-none absolute inset-0 z-[22] h-full w-full"
+      className="pointer-events-none absolute inset-0 z-20 h-full w-full"
       animate={{ opacity: isHidden ? 0 : 1 }}
       transition={{ duration: 0.45, delay: isHidden ? 0.15 : 0, ease: 'easeOut' }}
     >
       <defs>
-        <linearGradient id="constLine" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="rgba(227, 184, 122, 0.05)" />
-          <stop offset="40%" stopColor="rgba(236, 199, 145, 0.42)" />
-          <stop offset="68%" stopColor="rgba(202, 133, 68, 0.3)" />
-          <stop offset="100%" stopColor="rgba(227, 184, 122, 0.06)" />
+        <linearGradient id="orbitalLine" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="rgba(239, 203, 149, 0)" />
+          <stop offset="32%" stopColor="rgba(248, 223, 184, 0.58)" />
+          <stop offset="64%" stopColor="rgba(217, 144, 70, 0.34)" />
+          <stop offset="100%" stopColor="rgba(239, 203, 149, 0)" />
         </linearGradient>
       </defs>
-      {paths.map((path) => (
-        <g key={path}>
+
+      {tracePaths.map((path, index) => (
+        <g key={path.d}>
           <motion.path
-            d={path}
+            d={path.d}
             fill="none"
-            stroke="rgba(235, 198, 140, 0.28)"
-            strokeWidth="0.85"
+            stroke="rgba(238, 195, 129, 0.16)"
+            strokeWidth={path.width + 0.8}
+            strokeDasharray={path.dash}
             strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
             initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 0.62 }}
-            transition={{ duration: 2.8, delay: 0.7, ease: 'easeOut' }}
-            style={{ filter: 'drop-shadow(0 0 3px rgba(181,118,58,0.28))' }}
+            animate={{ pathLength: 1, opacity: path.opacity }}
+            transition={{
+              duration: 3.4,
+              delay: 0.45 + index * 0.16,
+              ease: 'easeOut',
+            }}
+            style={{ filter: 'blur(1.4px)' }}
           />
           <motion.path
-            d={path}
+            d={path.d}
             fill="none"
-            stroke="url(#constLine)"
-            strokeWidth="0.7"
-            strokeDasharray="1.1 6.2"
+            stroke="url(#orbitalLine)"
+            strokeWidth={path.width}
+            strokeDasharray={path.dash}
             strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
             initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 0.72 }}
-            transition={{ duration: 2.6, delay: 0.85, ease: 'easeOut' }}
-            style={{ filter: 'drop-shadow(0 0 2px rgba(202,133,68,0.34))' }}
+            animate={{ pathLength: 1, opacity: Math.min(path.opacity + 0.18, 0.72) }}
+            transition={{
+              duration: 3.4,
+              delay: 0.45 + index * 0.16,
+              ease: 'easeOut',
+            }}
+            style={{ filter: 'drop-shadow(0 0 5px rgba(210,138,64,0.24))' }}
           />
         </g>
       ))}
