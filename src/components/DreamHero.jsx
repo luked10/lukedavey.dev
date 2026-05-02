@@ -1,11 +1,12 @@
-import { useState } from 'react'
-import { motion } from 'motion/react'
+import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { starNodes } from '../data/starNodes'
 import FloatingStar from './FloatingStar'
-import StarModal from './StarModal'
 import GrainOverlay from './GrainOverlay'
 import VignetteOverlay from './VignetteOverlay'
 import ConstellationLines from './ConstellationLines'
+import MemoryTransitionOverlay from './MemoryTransitionOverlay'
+import DetailPage from './DetailPage'
 
 const navItems = ['About', 'Journal', 'Photography', 'Listening', 'Archive']
 
@@ -20,7 +21,49 @@ const labelSide = {
 }
 
 export default function DreamHero() {
-  const [selectedStar, setSelectedStar] = useState(null)
+  const shouldReduceMotion = useReducedMotion()
+  const transitionTimers = useRef([])
+  const [selectedSection, setSelectedSection] = useState(null)
+  const [detailSection, setDetailSection] = useState(null)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [transitionOrigin, setTransitionOrigin] = useState(null)
+  const uiHidden = isTransitioning || Boolean(detailSection)
+
+  useEffect(() => {
+    return () => {
+      transitionTimers.current.forEach((timer) => window.clearTimeout(timer))
+    }
+  }, [])
+
+  const handleSelectSection = (star, event) => {
+    if (isTransitioning) return
+
+    const rect = event.currentTarget.getBoundingClientRect()
+    setTransitionOrigin({
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+    })
+    setSelectedSection(star)
+
+    if (shouldReduceMotion) {
+      setDetailSection(star)
+      setIsTransitioning(false)
+      return
+    }
+
+    setIsTransitioning(true)
+    transitionTimers.current.forEach((timer) => window.clearTimeout(timer))
+    transitionTimers.current = [
+      window.setTimeout(() => setDetailSection(star), 780),
+      window.setTimeout(() => setIsTransitioning(false), 1350),
+    ]
+  }
+
+  const handleBack = () => {
+    if (isTransitioning) return
+    setDetailSection(null)
+    setSelectedSection(null)
+  }
 
   return (
     <>
@@ -28,19 +71,37 @@ export default function DreamHero() {
         aria-label="desiderium — fragments of me"
         className="relative h-full w-full overflow-hidden"
       >
-        {/* z-0 background image — full bleed */}
-        <img
-          src="/dream-bg.webp"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 z-0 h-full w-full object-cover"
-          draggable={false}
-        />
+        {/* z-0 background image */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          animate={{
+            scale: isTransitioning ? 1.1 : 1,
+            filter: isTransitioning ? 'blur(2px)' : 'blur(0px)',
+          }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <img
+            src="/ld.webp"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full scale-105 object-cover opacity-75 blur-2xl"
+            draggable={false}
+          />
+          <img
+            src="/ld.webp"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+            draggable={false}
+          />
+        </motion.div>
 
         {/* z-10 very light matte for text legibility, mostly preserves image vibrance */}
-        <div
+        <motion.div
           aria-hidden="true"
           className="absolute inset-0 z-10"
+          animate={{ opacity: detailSection ? 0 : 1 }}
+          transition={{ duration: 0.45, ease: 'easeOut' }}
           style={{ background: 'rgba(5, 5, 14, 0.18)' }}
         />
 
@@ -51,17 +112,20 @@ export default function DreamHero() {
         <GrainOverlay />
 
         {/* z-20 constellation arcs (under stars and labels) */}
-        <ConstellationLines />
+        <ConstellationLines isHidden={uiHidden} />
 
         {/* z-20 nav + brand */}
         <motion.header
           className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-6 sm:px-12 pt-6 sm:pt-8"
           initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.6, ease: 'easeOut', delay: 0.2 }}
+          animate={{ opacity: uiHidden ? 0 : 1, y: uiHidden ? -8 : 0 }}
+          transition={{
+            opacity: { duration: uiHidden ? 0.4 : 1.6, delay: uiHidden ? 0.15 : 0.2, ease: 'easeOut' },
+            y: { duration: 0.6, ease: 'easeOut' },
+          }}
         >
           <span
-            className="font-serif italic text-[18px] sm:text-[20px]"
+            className="font-serif italic text-[22px] sm:text-[26px]"
             style={{
               fontFamily: '"Playfair Display", Georgia, serif',
               color: 'rgba(245, 237, 222, 0.95)',
@@ -76,7 +140,7 @@ export default function DreamHero() {
                 <li key={item}>
                   <a
                     href={`#${item.toLowerCase()}`}
-                    className="font-serif text-[15px] transition-colors duration-500"
+                    className="font-serif text-[17px] transition-colors duration-500"
                     style={{
                       fontFamily: '"Playfair Display", Georgia, serif',
                       color: 'rgba(245, 237, 222, 0.78)',
@@ -95,7 +159,7 @@ export default function DreamHero() {
               ))}
             </ul>
             <span
-              className="md:hidden text-[10px] uppercase tracking-[0.3em]"
+              className="md:hidden text-[12px] uppercase tracking-[0.3em]"
               style={{
                 color: 'rgba(245, 237, 222, 0.6)',
                 textShadow: '0 1px 6px rgba(0,0,0,0.7)',
@@ -110,8 +174,11 @@ export default function DreamHero() {
         <motion.div
           className="absolute z-20 left-6 sm:left-12 bottom-10 sm:bottom-16 max-w-[88%] sm:max-w-[55%]"
           initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.8, ease: 'easeOut', delay: 0.5 }}
+          animate={{ opacity: uiHidden ? 0 : 1, y: uiHidden ? 12 : 0 }}
+          transition={{
+            opacity: { duration: uiHidden ? 0.4 : 1.8, delay: uiHidden ? 0.15 : 0.5, ease: 'easeOut' },
+            y: { duration: 0.55, ease: 'easeOut' },
+          }}
         >
           <h1
             className="font-serif tracking-tight"
@@ -171,13 +238,21 @@ export default function DreamHero() {
             key={star.id}
             star={star}
             side={labelSide[star.id] || 'right'}
-            onSelect={setSelectedStar}
+            activeStarId={selectedSection?.id}
+            isHidden={uiHidden}
+            isTransitioning={isTransitioning}
+            onSelect={handleSelectSection}
           />
         ))}
+
+        <AnimatePresence>
+          {detailSection && <DetailPage section={detailSection} onBack={handleBack} />}
+        </AnimatePresence>
       </section>
 
-      {/* z-50 modal */}
-      <StarModal star={selectedStar} onClose={() => setSelectedStar(null)} />
+      <AnimatePresence>
+        {isTransitioning && <MemoryTransitionOverlay origin={transitionOrigin} />}
+      </AnimatePresence>
     </>
   )
 }

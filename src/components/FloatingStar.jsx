@@ -88,13 +88,21 @@ function StarMark({ active = false }) {
   )
 }
 
-export default function FloatingStar({ star, onSelect, side = 'right' }) {
+export default function FloatingStar({
+  star,
+  onSelect,
+  side = 'right',
+  activeStarId,
+  isHidden = false,
+  isTransitioning = false,
+}) {
   const labelRight = side === 'right'
+  const isActive = activeStarId ? activeStarId === star.id : star.id === 'today'
 
   return (
     <motion.button
       type="button"
-      onClick={() => onSelect(star)}
+      onClick={(event) => onSelect(star, event)}
       aria-label={`Open ${star.title}`}
       data-star-id={star.id}
       className="group floating-star absolute z-30 flex items-center"
@@ -109,13 +117,21 @@ export default function FloatingStar({ star, onSelect, side = 'right' }) {
       }}
       initial={{ opacity: 0, scale: 0.7 }}
       animate={{
-        opacity: 1,
-        scale: 1,
+        opacity: isHidden ? 0 : 1,
+        scale: isTransitioning && isActive ? [1, 1.2, 1.04] : 1,
         y: [0, -5, 0],
       }}
       transition={{
-        opacity: { duration: 1.6, delay: star.delay, ease: 'easeOut' },
-        scale: { duration: 1.6, delay: star.delay, ease: 'easeOut' },
+        opacity: {
+          duration: isHidden ? 0.4 : 1.6,
+          delay: isHidden ? 0.15 : star.delay,
+          ease: 'easeOut',
+        },
+        scale: {
+          duration: isTransitioning && isActive ? 0.16 : 1.6,
+          delay: isTransitioning && isActive ? 0 : star.delay,
+          ease: 'easeOut',
+        },
         y: {
           duration: 7 + (star.delay % 1.5),
           delay: star.delay,
@@ -126,7 +142,7 @@ export default function FloatingStar({ star, onSelect, side = 'right' }) {
       whileHover={{ scale: 1.06 }}
       whileTap={{ scale: 0.95 }}
     >
-      <StarMark active={star.id === 'today'} />
+      <StarMark active={isActive} />
 
       {/* Label block */}
       <span
