@@ -19,13 +19,13 @@ export default function SectionPreview({ section, onBack }) {
   }, [section.background, onBack])
 
   const containerClass = isJournal
-    ? 'relative z-20 mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-6 pt-28 pb-16 sm:px-10 md:px-16'
+    ? 'relative z-20 mx-auto flex min-h-screen w-full max-w-7xl items-start justify-center px-6 py-28 sm:px-10 md:px-16'
     : 'relative z-20 flex min-h-screen items-end px-6 pt-24 pb-10 sm:px-10 sm:pb-12 md:px-16 md:pb-16'
 
   return (
     <motion.section
       aria-labelledby='section-preview-title'
-      className='absolute inset-0 z-50 min-h-screen overflow-hidden bg-black text-[#f4ead8]'
+      className='absolute inset-0 z-50 min-h-screen overflow-y-auto overflow-x-hidden bg-black text-[#f4ead8]'
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -89,11 +89,7 @@ export default function SectionPreview({ section, onBack }) {
 
       <div className={containerClass}>
         <motion.article
-          className={
-            isJournal
-              ? 'w-full max-w-3xl text-left'
-              : 'max-w-xl'
-          }
+          className={isJournal ? 'w-full max-w-none px-0 text-left' : 'max-w-xl'}
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.72, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
@@ -109,12 +105,9 @@ export default function SectionPreview({ section, onBack }) {
               </h1>
 
               {section.content && (
-                <div
-                  className='mt-10 max-w-none rounded-[28px] border border-[#f4ead8]/10 bg-black/18 px-6 py-7 shadow-2xl shadow-black/20 backdrop-blur-sm sm:px-8 sm:py-8'
-                  style={{ width: 'min(100%, 56rem)' }}
-                >
+                <div className='mt-10 w-full max-w-none px-0' style={{ width: 'min(100%, 74rem)' }}>
                   <div
-                    className='whitespace-pre-wrap text-[20px] leading-9 text-[#f4ead8]/88 sm:text-[22px] sm:leading-[1.8]'
+                    className='whitespace-pre-wrap text-[22px] leading-[1.85] text-[#f4ead8]/90 sm:text-[24px]'
                     style={{ fontFamily: '"Manrope", system-ui, sans-serif' }}
                   >
                     {section.content}
