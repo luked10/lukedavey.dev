@@ -113,7 +113,6 @@ export default function SectionPreview({ section, onBack }) {
                     {section.content}
                   </div>
                 </div>
-<<<<<<< HEAD
               )}
             </>
           ) : (
@@ -140,7 +139,10 @@ export default function SectionPreview({ section, onBack }) {
 
               <div className='mt-8 grid gap-3'>
                 {section.links?.map((link) => (
-                  <div key={link.label} className='rounded-xl border border-[#f4ead8]/12 bg-black/25 px-4 py-3 backdrop-blur-md'>
+                  <div
+                    key={link.label}
+                    className='rounded-xl border border-[#f4ead8]/12 bg-black/25 px-4 py-3 backdrop-blur-md'
+                  >
                     <div className='text-xs uppercase tracking-[0.22em] text-[#f4ead8]/45'>
                       {link.label}
                     </div>
@@ -168,29 +170,6 @@ export default function SectionPreview({ section, onBack }) {
             </>
           )}
         </motion.article>
-=======
-              ))}
-            </div>
-          )}
-
-          <div className="mt-8 flex flex-wrap gap-4">
-            <a
-              href={section.route}
-              className="rounded-full border border-[#f4ead8]/35 px-6 py-3 text-xs uppercase tracking-[0.22em] text-[#f4ead8] transition hover:bg-[#f4ead8] hover:text-black"
-            >
-              {section.buttonLabel} →
-            </a>
-
-            <button
-              type="button"
-              onClick={onBack}
-              className="rounded-full border border-[#f4ead8]/15 px-6 py-3 text-xs uppercase tracking-[0.22em] text-[#f4ead8]/65 transition hover:text-[#f4ead8]"
-            >
-              Back
-            </button>
-          </div>
-        </motion.div>
->>>>>>> 6f1b2be (flower-img added)
       </div>
     </motion.section>
   )
