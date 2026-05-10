@@ -5,7 +5,7 @@ import VignetteOverlay from './VignetteOverlay'
 
 export default function SectionPreview({ section, onBack }) {
   const isJournal = section.id === 'journal'
-  const backgroundSrc = isJournal ? '/blogbackground.jpg' : section.background
+  const backgroundSrc = section.background
 
   useEffect(() => {
     const onKeyDown = (event) => {
