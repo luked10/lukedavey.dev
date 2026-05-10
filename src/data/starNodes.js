@@ -45,17 +45,6 @@ export const starNodes = [
     floatDuration: 7.8
   },
   {
-    id: "today",
-    title: "Today",
-    subtitle: "current log",
-    content: "Daily thoughts.",
-    x: "82%",
-    y: "74%",
-    delay: 1,
-    float: 7,
-    floatDuration: 6.9
-  },
-  {
     id: "archive",
     title: "Archive",
     subtitle: "kept thoughts",
