@@ -19,7 +19,7 @@ Eventually, I conquered those and fell right back into a bad spot my first sem j
 
 Doing bad in school but getting through, fully locked in on recruiting now. Got the Stryker Co-op, got the a1zap YC startup offer, but shitty contract so faded, just got some summer research assistant position at the University of Michigan Transportation Research Institute, so we on the up. 
 
-Currently hopeful, not feeling depressed, just on my phone too much, need to be more present and live more, tryna wean off caffeine. Might have ADHD? But electronic usage and short-form content create and exacerbate ADHD symptoms, so I will deal with that accordingly. I find some basic things boring now and seek out more intense things to feel entertained, definitely short-form content addiction. 
+Currently hopeful, not feeling depressed, just on my phone too much, need to be more present and live more, tryna wean off caffeine. Might have ADHD? But electronic usage and short-form content create and exacerbate ADHD symptoms, so I will deal with that accordingly. I find some basic things boring now and seek out more intense things to feel entertained, definitely short-form content addiction.
 `,
   },
 }
