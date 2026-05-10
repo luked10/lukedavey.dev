@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
 
+const BLOG_PASSWORD_KEY = 'lukedavey.dev:journal-password'
+const BLOG_PASSWORD_VALUE = 'living'
+
 export default function PasswordGate({ title, subtitle, onSubmit, onCancel }) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -13,6 +16,10 @@ export default function PasswordGate({ title, subtitle, onSubmit, onCancel }) {
       setError('Incorrect password')
       setPassword('')
       return
+    }
+
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(BLOG_PASSWORD_KEY, BLOG_PASSWORD_VALUE)
     }
 
     setError('')
