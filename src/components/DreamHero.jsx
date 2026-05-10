@@ -7,9 +7,12 @@ import GrainOverlay from './GrainOverlay'
 import VignetteOverlay from './VignetteOverlay'
 import ConstellationLines from './ConstellationLines'
 import MemoryTransitionOverlay from './MemoryTransitionOverlay'
+import PasswordGate from './PasswordGate'
 import SectionPreview from './SectionPreview'
 
 const defaultBackgroundImage = '/ld.webp'
+const BLOG_PASSWORD_KEY = 'lukedavey.dev:journal-unlocked'
+const JOURNAL_PASSWORD = 'living'
 
 // Side determines which side of the star the label sits on
 const labelSide = {
@@ -27,12 +30,17 @@ export default function DreamHero() {
   const [selectedSection, setSelectedSection] = useState(null)
   const [activeSection, setActiveSection] = useState(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const [isJournalUnlocked, setIsJournalUnlocked] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.localStorage.getItem(BLOG_PASSWORD_KEY) === 'true'
+  })
+  const [isJournalGateOpen, setIsJournalGateOpen] = useState(false)
   const [transitionOrigin, setTransitionOrigin] = useState(null)
   const activeSectionData = activeSection ? sections[activeSection] : null
   const transitionSectionData = selectedSection ? sections[selectedSection.id] : null
-  const uiHidden = isTransitioning || Boolean(activeSectionData)
+  const uiHidden = isTransitioning || Boolean(activeSectionData) || isJournalGateOpen
   const activeBackgroundImage =
-    (isTransitioning ? transitionSectionData?.background : null) ||
+    (isTransitioning ? transitionSectionData?.background : isJournalGateOpen ? transitionSectionData?.background : null) ||
     defaultBackgroundImage
 
   useEffect(() => {
@@ -41,8 +49,24 @@ export default function DreamHero() {
     }
   }, [])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    window.localStorage.setItem(BLOG_PASSWORD_KEY, isJournalUnlocked ? 'true' : 'false')
+  }, [isJournalUnlocked])
+
   const handleSelectSection = (star, event) => {
     if (isTransitioning) return
+
+    if (star.id === 'journal' && !isJournalUnlocked) {
+      const rect = event.currentTarget.getBoundingClientRect()
+      setTransitionOrigin({
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+      })
+      setSelectedSection(star)
+      setIsJournalGateOpen(true)
+      return
+    }
 
     const rect = event.currentTarget.getBoundingClientRect()
     setTransitionOrigin({
@@ -68,6 +92,23 @@ export default function DreamHero() {
   const handleBack = () => {
     if (isTransitioning) return
     setActiveSection(null)
+    setSelectedSection(null)
+    setIsJournalGateOpen(false)
+    setTransitionOrigin(null)
+  }
+
+  const handleJournalUnlock = async (password) => {
+    if (password !== JOURNAL_PASSWORD) return false
+
+    setIsJournalUnlocked(true)
+    setIsJournalGateOpen(false)
+    setActiveSection('journal')
+    return true
+  }
+
+  const handleJournalGateCancel = () => {
+    if (isTransitioning) return
+    setIsJournalGateOpen(false)
     setSelectedSection(null)
     setTransitionOrigin(null)
   }
@@ -231,6 +272,17 @@ export default function DreamHero() {
         <AnimatePresence>
           {activeSectionData && (
             <SectionPreview section={activeSectionData} onBack={handleBack} />
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isJournalGateOpen && selectedSection?.id === 'journal' && (
+            <PasswordGate
+              title={sections.journal.title}
+              subtitle='protected journal'
+              onSubmit={handleJournalUnlock}
+              onCancel={handleJournalGateCancel}
+            />
           )}
         </AnimatePresence>
       </section>
