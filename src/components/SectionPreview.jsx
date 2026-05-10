@@ -123,17 +123,24 @@ export default function SectionPreview({ section, onBack }) {
             </p>
           )}
 
-          {section.description && (
+          {isJournal ? (
+            <>
+              <p className="mt-4 max-w-2xl font-serif text-2xl italic leading-snug text-[#f4ead8]/75 sm:text-3xl">
+                {section.description}
+              </p>
+              {section.content && (
+                <div className="mt-8 max-h-[42vh] max-w-2xl overflow-y-auto pr-3 text-[15px] leading-7 text-[#f4ead8]/80 sm:text-[17px] sm:leading-8">
+                  <p className="whitespace-pre-wrap">{section.content}</p>
+                </div>
+              )}
+            </>
+          ) : section.description ? (
             <p
-              className={
-                isJournal
-                  ? 'mt-4 max-w-md font-serif text-2xl italic leading-snug text-[#f4ead8]/75'
-                  : 'mt-6 max-w-md text-base leading-7 text-[#f4ead8]/75'
-              }
+              className="mt-6 max-w-md text-base leading-7 text-[#f4ead8]/75"
             >
               {section.description}
             </p>
-          )}
+          ) : null}
 
           {!isJournal && (
             <div className="mt-8 grid gap-3">
