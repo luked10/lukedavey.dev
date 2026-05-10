@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
+import flowerIllustration from '../assets/flower.svg'
 import GrainOverlay from './GrainOverlay'
 import VignetteOverlay from './VignetteOverlay'
 
@@ -19,7 +20,7 @@ export default function SectionPreview({ section, onBack }) {
   }, [section.background, onBack])
 
   const containerClass = isJournal
-    ? 'relative z-20 mx-auto flex min-h-screen w-full max-w-7xl items-start justify-center px-6 py-28 sm:px-10 md:px-16'
+    ? 'relative z-20 mx-auto flex min-h-screen w-full max-w-[92rem] items-start justify-center px-6 py-28 sm:px-10 md:px-16'
     : 'relative z-20 flex min-h-screen items-end px-6 pt-24 pb-10 sm:px-10 sm:pb-12 md:px-16 md:pb-16'
 
   return (
@@ -35,10 +36,12 @@ export default function SectionPreview({ section, onBack }) {
         <motion.img
           src={section.background}
           alt=''
-          className='absolute inset-0 z-0 h-full w-full object-cover'
-          style={{ filter: 'brightness(1.04) saturate(1.03)' }}
+          className={isJournal
+            ? 'absolute inset-0 z-0 h-full w-full object-cover object-[center_28%]'
+            : 'absolute inset-0 z-0 h-full w-full object-cover'}
+          style={{ filter: isJournal ? 'brightness(1.01) saturate(1.01)' : 'brightness(1.04) saturate(1.03)' }}
           draggable={false}
-          initial={{ opacity: 0, scale: 1.025 }}
+          initial={{ opacity: 0, scale: isJournal ? 1 : 1.025 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           onError={() => {
@@ -95,26 +98,38 @@ export default function SectionPreview({ section, onBack }) {
           transition={{ duration: 0.72, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
         >
           {isJournal ? (
-            <>
-              <h1
-                id='section-preview-title'
-                className='font-serif text-[clamp(4.4rem,9vw,7.8rem)] leading-[0.9] tracking-[-0.06em] text-[#f4ead8]'
-                style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
-              >
-                {section.title}
-              </h1>
+            <div className='grid w-full items-start gap-10 lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-12'>
+              <div className='w-full max-w-none'>
+                <h1
+                  id='section-preview-title'
+                  className='font-serif text-[clamp(4.4rem,9vw,7.8rem)] leading-[0.9] tracking-[-0.06em] text-[#f4ead8]'
+                  style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                >
+                  {section.title}
+                </h1>
 
-              {section.content && (
-                <div className='mt-10 w-full max-w-none px-0' style={{ width: 'min(100%, 74rem)' }}>
-                  <div
-                    className='whitespace-pre-wrap text-[22px] leading-[1.85] text-[#f4ead8]/90 sm:text-[24px]'
-                    style={{ fontFamily: '"Manrope", system-ui, sans-serif' }}
-                  >
-                    {section.content}
+                {section.content && (
+                  <div className='mt-10 w-full max-w-none'>
+                    <div
+                      className='whitespace-pre-wrap text-[22px] leading-[1.85] text-[#f4ead8]/90 sm:text-[24px]'
+                      style={{ fontFamily: '"Manrope", system-ui, sans-serif' }}
+                    >
+                      {section.content}
+                    </div>
                   </div>
-                </div>
-              )}
-            </>
+                )}
+              </div>
+
+              <div className='hidden justify-self-end lg:block'>
+                <img
+                  src={flowerIllustration}
+                  alt=''
+                  aria-hidden='true'
+                  className='w-[220px] select-none opacity-85 drop-shadow-[0_16px_40px_rgba(0,0,0,0.3)]'
+                  draggable={false}
+                />
+              </div>
+            </div>
           ) : (
             <>
               <p className='mb-5 text-xs uppercase tracking-[0.28em] text-[#f4ead8]/60 sm:text-sm'>
