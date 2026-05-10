@@ -1,23 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { motion } from 'motion/react'
 import GrainOverlay from './GrainOverlay'
 import VignetteOverlay from './VignetteOverlay'
 
 export default function SectionPreview({ section, onBack }) {
-  const [imageMissing, setImageMissing] = useState(false)
   const isJournal = section.id === 'journal'
   const backgroundSrc = isJournal ? '/blogbackground.jpg' : section.background
 
   useEffect(() => {
-    setImageMissing(false)
-
     const onKeyDown = (event) => {
       if (event.key === 'Escape') onBack()
     }
 
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [backgroundSrc, onBack])
+  }, [onBack])
 
   const containerClass = isJournal
     ? 'relative z-20 mx-auto flex min-h-screen w-full max-w-[92rem] items-start justify-center px-6 py-28 sm:px-10 md:px-16'
@@ -32,31 +29,32 @@ export default function SectionPreview({ section, onBack }) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.62, ease: 'easeOut' }}
     >
-      {!imageMissing && (
+      {isJournal ? (
+        <div
+          aria-hidden='true'
+          className='absolute inset-0 z-0'
+          style={{
+            backgroundImage: 'url("/blogbackground.jpg")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            filter: 'brightness(1.02) saturate(1.02)',
+          }}
+        />
+      ) : (
         <motion.img
           src={backgroundSrc}
           alt=''
           className='absolute inset-0 z-0 h-full w-full object-cover object-center'
-          style={{
-            filter: isJournal ? 'brightness(1.02) saturate(1.02)' : 'brightness(1.04) saturate(1.03)',
-          }}
+          style={{ filter: 'brightness(1.04) saturate(1.03)' }}
           draggable={false}
           initial={{ opacity: 0, scale: 1 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           onError={() => {
             console.error('Missing background:', backgroundSrc)
-            setImageMissing(true)
           }}
         />
-      )}
-
-      {imageMissing && (
-        <div className='absolute inset-0 z-0 flex items-center justify-center bg-[#050509] px-6 text-center'>
-          <p className='max-w-md rounded-xl border border-[#f4ead8]/15 bg-black/35 px-5 py-4 font-serif text-lg text-[#f4ead8]/85 backdrop-blur-md'>
-            Background image missing: {backgroundSrc}
-          </p>
-        </div>
       )}
 
       <div aria-hidden='true' className='absolute inset-0 z-10' style={{ background: 'rgba(0, 0, 0, 0.22)' }} />
