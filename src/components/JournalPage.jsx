@@ -170,8 +170,7 @@ export default function JournalPage({ onBack }) {
             Journal
           </h1>
           <p className="mt-4 max-w-lg font-serif text-2xl italic leading-snug text-[#f4ead8]/72">
-            some thoughts
-          </p>
+            </p>
         </header>
 
         <div className="mt-10 grid gap-5">
