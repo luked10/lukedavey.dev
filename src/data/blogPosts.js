@@ -2,7 +2,7 @@ export const blogPosts = {
   hanSoloBurger: {
     id: 'han-solo-burger',
     title: 'Han Solo Burger',
-    subtitle: 'journal / imported from the-brain',
+    subtitle: '',
     content: `
 Preamble: 
 	This is kind of a blurb of where I've been and where I'm going kind of like a shitty version of my actual journaling on pen and paper, but my first time doing this while also high asf....
