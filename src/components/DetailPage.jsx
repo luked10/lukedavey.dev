@@ -69,7 +69,7 @@ export default function DetailPage({ section, onBack }) {
           {section.title}
         </h1>
         <p
-          className="mt-5 max-w-md text-[15px] leading-relaxed sm:text-[17px]"
+          className="mt-5 max-w-md whitespace-pre-wrap text-[15px] leading-relaxed sm:text-[17px]"
           style={{
             color: 'rgba(245, 237, 222, 0.76)',
             textShadow: '0 1px 10px rgba(0,0,0,0.62)',
