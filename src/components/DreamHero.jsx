@@ -11,7 +11,6 @@ import PasswordGate from './PasswordGate'
 import SectionPreview from './SectionPreview'
 
 const defaultBackgroundImage = '/ld.webp'
-const BLOG_PASSWORD_KEY = 'lukedavey.dev:journal-password'
 const JOURNAL_PASSWORD = 'living'
 
 // Side determines which side of the star the label sits on
@@ -29,10 +28,7 @@ export default function DreamHero() {
   const [selectedSection, setSelectedSection] = useState(null)
   const [activeSection, setActiveSection] = useState(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
-  const [isJournalUnlocked, setIsJournalUnlocked] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return window.localStorage.getItem(BLOG_PASSWORD_KEY) === JOURNAL_PASSWORD
-  })
+  const [isJournalUnlocked, setIsJournalUnlocked] = useState(false)
   const [isJournalGateOpen, setIsJournalGateOpen] = useState(false)
   const [transitionOrigin, setTransitionOrigin] = useState(null)
   const activeSectionData = activeSection ? sections[activeSection] : null
@@ -47,11 +43,6 @@ export default function DreamHero() {
       transitionTimers.current.forEach((timer) => window.clearTimeout(timer))
     }
   }, [])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    window.localStorage.setItem(BLOG_PASSWORD_KEY, isJournalUnlocked ? JOURNAL_PASSWORD : '')
-  }, [isJournalUnlocked])
 
   const handleSelectSection = (star, event) => {
     if (isTransitioning) return
