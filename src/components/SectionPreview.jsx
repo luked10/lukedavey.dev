@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
-import flowerIllustration from '../assets/flower.svg'
 import GrainOverlay from './GrainOverlay'
 import VignetteOverlay from './VignetteOverlay'
 
 export default function SectionPreview({ section, onBack }) {
   const [imageMissing, setImageMissing] = useState(false)
   const isJournal = section.id === 'journal'
+  const backgroundSrc = isJournal ? '/blogbackground.jpg' : section.background
 
   useEffect(() => {
     setImageMissing(false)
@@ -17,7 +17,7 @@ export default function SectionPreview({ section, onBack }) {
 
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [section.background, onBack])
+  }, [backgroundSrc, onBack])
 
   const containerClass = isJournal
     ? 'relative z-20 mx-auto flex min-h-screen w-full max-w-[92rem] items-start justify-center px-6 py-28 sm:px-10 md:px-16'
@@ -34,18 +34,18 @@ export default function SectionPreview({ section, onBack }) {
     >
       {!imageMissing && (
         <motion.img
-          src={section.background}
+          src={backgroundSrc}
           alt=''
-          className={isJournal
-            ? 'absolute inset-0 z-0 h-full w-full object-cover object-[center_28%]'
-            : 'absolute inset-0 z-0 h-full w-full object-cover'}
-          style={{ filter: isJournal ? 'brightness(1.01) saturate(1.01)' : 'brightness(1.04) saturate(1.03)' }}
+          className='absolute inset-0 z-0 h-full w-full object-cover object-center'
+          style={{
+            filter: isJournal ? 'brightness(1.02) saturate(1.02)' : 'brightness(1.04) saturate(1.03)',
+          }}
           draggable={false}
-          initial={{ opacity: 0, scale: isJournal ? 1 : 1.025 }}
+          initial={{ opacity: 0, scale: 1 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           onError={() => {
-            console.error('Missing background:', section.background)
+            console.error('Missing background:', backgroundSrc)
             setImageMissing(true)
           }}
         />
@@ -54,7 +54,7 @@ export default function SectionPreview({ section, onBack }) {
       {imageMissing && (
         <div className='absolute inset-0 z-0 flex items-center justify-center bg-[#050509] px-6 text-center'>
           <p className='max-w-md rounded-xl border border-[#f4ead8]/15 bg-black/35 px-5 py-4 font-serif text-lg text-[#f4ead8]/85 backdrop-blur-md'>
-            Background image missing: {section.background}
+            Background image missing: {backgroundSrc}
           </p>
         </div>
       )}
@@ -118,16 +118,6 @@ export default function SectionPreview({ section, onBack }) {
                     </div>
                   </div>
                 )}
-              </div>
-
-              <div className='hidden justify-self-end lg:block'>
-                <img
-                  src={flowerIllustration}
-                  alt=''
-                  aria-hidden='true'
-                  className='w-[220px] select-none opacity-85 drop-shadow-[0_16px_40px_rgba(0,0,0,0.3)]'
-                  draggable={false}
-                />
               </div>
             </div>
           ) : (
