@@ -7,7 +7,7 @@ export const sections = {
     subtitle: blogPosts.hanSoloBurger.subtitle,
     eyebrow: 'Journal',
     description: 'some thoughts',
-    background: '/journal.png',
+    background: '/blogbackground.svg',
     buttonLabel: 'Open Journal',
     route: '/journal',
     requiresPassword: true,
