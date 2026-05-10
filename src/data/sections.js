@@ -1,4 +1,5 @@
 import { blogPosts } from './blogPosts'
+import waterImage from '../assets/waterImage'
 
 export const sections = {
   journal: {
@@ -7,7 +8,7 @@ export const sections = {
     subtitle: '',
     eyebrow: '',
     description: '',
-    background: '/blogbackground.jpg',
+    background: waterImage,
     buttonLabel: 'Open Journal',
     route: '/journal',
     requiresPassword: true,
