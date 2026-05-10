@@ -1,13 +1,17 @@
+import { blogPosts } from './blogPosts'
+
 export const sections = {
   journal: {
-    id: "journal",
-    title: "Journal",
-    subtitle: "",
-    eyebrow: "Journal",
-    description: "some thoughts",
-    background: "/journal.png",
-    buttonLabel: "Open Journal",
-    route: "/journal",
+    id: 'journal',
+    title: blogPosts.hanSoloBurger.title,
+    subtitle: blogPosts.hanSoloBurger.subtitle,
+    eyebrow: 'Journal',
+    description: 'some thoughts',
+    background: '/journal.png',
+    buttonLabel: 'Open Journal',
+    route: '/journal',
+    requiresPassword: true,
+    content: blogPosts.hanSoloBurger.content,
     links: []
   },
 
