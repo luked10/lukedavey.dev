@@ -34,7 +34,7 @@ export default function SectionPreview({ section, onBack }) {
           aria-hidden='true'
           className='absolute inset-0 z-0'
           style={{
-            backgroundImage: 'url("/blogbackground.jpg")',
+            backgroundImage: 'url(' + backgroundSrc + ')',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
