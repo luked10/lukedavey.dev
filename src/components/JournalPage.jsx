@@ -4,7 +4,6 @@ import GrainOverlay from './GrainOverlay'
 import VignetteOverlay from './VignetteOverlay'
 
 const entriesStorageKey = 'lukedavey.journal.entries'
-const unlockStorageKey = 'lukedavey.journal.unlocked'
 const defaultJournalPassword = 'memory'
 
 const starterEntries = [
@@ -39,9 +38,7 @@ function formatEntryDate(date) {
 export default function JournalPage({ onBack }) {
   const shouldReduceMotion = useReducedMotion()
   const [storedEntries, setStoredEntries] = useState(readStoredEntries)
-  const [isUnlocked, setIsUnlocked] = useState(
-    () => window.localStorage.getItem(unlockStorageKey) === 'true',
-  )
+  const [isUnlocked, setIsUnlocked] = useState(false)
   const [password, setPassword] = useState('')
   const [unlockError, setUnlockError] = useState('')
   const [draft, setDraft] = useState({ title: '', mood: '', body: '' })
@@ -68,7 +65,6 @@ export default function JournalPage({ onBack }) {
       import.meta.env.VITE_JOURNAL_PASSWORD || defaultJournalPassword
 
     if (password === configuredPassword) {
-      window.localStorage.setItem(unlockStorageKey, 'true')
       setIsUnlocked(true)
       setIsComposerOpen(true)
       setPassword('')
@@ -80,7 +76,6 @@ export default function JournalPage({ onBack }) {
   }
 
   const handleLock = () => {
-    window.localStorage.removeItem(unlockStorageKey)
     setIsUnlocked(false)
     setIsComposerOpen(false)
   }
