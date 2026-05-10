@@ -75,20 +75,5 @@ export const sections = {
       { label: "2026", value: "new entries" },
       { label: "Drafts", value: "things half written" }
     ]
-  },
-
-  today: {
-    id: "today",
-    title: "Today",
-    subtitle: "current log",
-    eyebrow: "lukedavey / today",
-    description: "A small snapshot of what life feels like right now.",
-    background: "/dream-bg.webp",
-    buttonLabel: "Open Today",
-    route: "/today",
-    links: [
-      { label: "Mood", value: "city-light brain fog" },
-      { label: "Thought", value: "I keep wanting to build places instead of profiles." }
-    ]
   }
 };
