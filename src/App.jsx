@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import DashboardBoi from './components/DashboardBoi'
-import DreamHero from './components/DreamHero'
 import JournalPage from './components/JournalPage'
 
 const getCurrentPath = () => window.location.pathname
