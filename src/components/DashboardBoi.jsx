@@ -1,23 +1,33 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 
-const metricCardsBoi = [
-  { label: 'Profit', value: '—', note: 'session pnl' },
-  { label: 'Avg Win/Loss', value: '— / —', note: 'per trade' },
-  { label: 'Best Trade', value: '—', note: 'top realized move' },
-  { label: 'Win Ratio', value: '—', note: 'closed trades' },
-  { label: 'Risk/Reward', value: '—', note: 'avg ratio' },
-  { label: 'Profit Factor', value: '—', note: 'gross wins / losses' },
+const metricCards = [
+  { label: 'Profit', value: '—' },
+  { label: 'Avg Win/Loss', value: '— / —' },
+  { label: 'Best Trade', value: '—' },
+  { label: 'Win Ratio', value: '—' },
+  { label: 'Risk/Reward', value: '—' },
+  { label: 'Profit Factor', value: '—' },
 ]
 
-const controlCardsBoi = [
-  { label: 'Daily Loss Limit', value: '—', note: 'risk cap' },
-  { label: 'Profit Target', value: '—', note: 'session goal' },
-  { label: 'Total Balance', value: '—', note: 'incl. charges / fees' },
-  { label: 'Notifications', value: 'Live', note: 'repo pulse' },
+const controlCards = [
+  { label: 'Daily Loss Limit', value: '—' },
+  { label: 'Profit Target', value: '—' },
+  { label: 'Total Balance', value: '—' },
 ]
 
-function formatRelativeBoi(dateString) {
+const sidebarGroups = [
+  {
+    heading: 'Menu',
+    items: ['Dashboard', 'Orders', 'Balances', 'History'],
+  },
+  {
+    heading: 'Apps',
+    items: ['Trading', 'Notifications', 'Settings'],
+  },
+]
+
+function formatRelative(dateString) {
   const date = new Date(dateString)
   const diffSeconds = Math.round((Date.now() - date.getTime()) / 1000)
 
@@ -30,21 +40,72 @@ function formatRelativeBoi(dateString) {
   return Math.round(diffHours / 24) + 'd ago'
 }
 
-function shortShaBoi(value = '') {
+function shortSha(value = '') {
   return value.slice(0, 7)
 }
 
+function ChartLine() {
+  const points = [
+    [0, 72],
+    [12, 68],
+    [24, 71],
+    [36, 60],
+    [48, 63],
+    [60, 48],
+    [72, 52],
+    [84, 41],
+    [96, 46],
+    [108, 34],
+    [120, 30],
+    [132, 38],
+    [144, 26],
+    [156, 20],
+    [168, 18],
+    [180, 24],
+    [192, 16],
+    [204, 12],
+    [216, 17],
+    [228, 8],
+    [240, 10],
+  ]
+
+  const linePath = points.map((p, index) => (index === 0 ? 'M' : 'L') + p[0] + ' ' + p[1]).join(' ')
+  const areaPath = linePath + ' L 240 100 L 0 100 Z'
+
+  return (
+    <svg viewBox='0 0 240 100' className='h-full w-full overflow-visible'>
+      <defs>
+        <linearGradient id='balanceFill' x1='0%' y1='0%' x2='0%' y2='100%'>
+          <stop offset='0%' stopColor='rgba(59, 130, 246, 0.24)' />
+          <stop offset='100%' stopColor='rgba(59, 130, 246, 0.02)' />
+        </linearGradient>
+      </defs>
+      <path d={areaPath} fill='url(#balanceFill)' />
+      <path d={linePath} fill='none' stroke='rgb(59, 130, 246)' strokeWidth='3' strokeLinecap='round' strokeLinejoin='round' />
+      {points.map((point, index) => (
+        <circle key={index} cx={point[0]} cy={point[1]} r='2.8' fill='rgb(59, 130, 246)' />
+      ))}
+    </svg>
+  )
+}
+
 export default function DashboardBoi() {
-  const shouldReduceMotionBoi = useReducedMotion()
-  const [orderHistoryBoi, setOrderHistoryBoi] = useState([])
-  const [feedStateBoi, setFeedStateBoi] = useState('loading')
+  const shouldReduceMotion = useReducedMotion()
+  const [clock, setClock] = useState(new Date())
+  const [orderHistory, setOrderHistory] = useState([])
+  const [feedState, setFeedState] = useState('loading')
 
   useEffect(() => {
-    let cancelledBoi = false
+    const timer = window.setInterval(() => setClock(new Date()), 1000)
+    return () => window.clearInterval(timer)
+  }, [])
 
-    const loadOrderHistoryBoi = async () => {
+  useEffect(() => {
+    let cancelled = false
+
+    const loadOrderHistory = async () => {
       try {
-        setFeedStateBoi((current) => (current === 'ready' ? 'refreshing' : 'loading'))
+        setFeedState((current) => (current === 'ready' ? 'refreshing' : 'loading'))
         const response = await fetch('https://api.github.com/repos/luked10/lukedavey.dev/commits?per_page=8')
 
         if (!response.ok) {
@@ -53,61 +114,62 @@ export default function DashboardBoi() {
 
         const commits = await response.json()
 
-        if (cancelledBoi) return
+        if (cancelled) return
 
-        const nextOrderHistoryBoi = commits.map((commit) => {
+        const nextOrderHistory = commits.map((commit) => {
           const message = commit.commit?.message || 'repo update'
           const lines = message.split(String.fromCharCode(10))
           const title = lines[0] || 'repo update'
-          const detail = lines.slice(1).join(' ') || 'repository decision pulse'
+          const detail = lines.slice(1).join(' ') || 'decision pulse'
           const author = commit.commit?.author?.name || commit.author?.login || 'repo'
 
           return {
             id: commit.sha,
             title,
             detail,
-            meta: author + ' · ' + shortShaBoi(commit.sha),
-            time: formatRelativeBoi(commit.commit?.author?.date || new Date().toISOString()),
+            meta: author + ' · ' + shortSha(commit.sha),
+            time: formatRelative(commit.commit?.author?.date || new Date().toISOString()),
+            status: detail.toLowerCase().includes('fix') ? 'Closed' : 'Open',
           }
         })
 
-        setOrderHistoryBoi(nextOrderHistoryBoi)
-        setFeedStateBoi('ready')
+        setOrderHistory(nextOrderHistory)
+        setFeedState('ready')
       } catch {
-        if (!cancelledBoi) {
-          setFeedStateBoi('offline')
-          setOrderHistoryBoi([])
+        if (!cancelled) {
+          setFeedState('offline')
+          setOrderHistory([])
         }
       }
     }
 
-    loadOrderHistoryBoi()
-    const pollBoi = window.setInterval(loadOrderHistoryBoi, 30000)
+    loadOrderHistory()
+    const poll = window.setInterval(loadOrderHistory, 30000)
 
     return () => {
-      cancelledBoi = true
-      window.clearInterval(pollBoi)
+      cancelled = true
+      window.clearInterval(poll)
     }
   }, [])
 
-  const visibleNotificationsBoi = useMemo(() => {
-    const latestOrderBoi = orderHistoryBoi[0]
+  const notifications = useMemo(() => {
+    const latest = orderHistory[0]
 
     return [
       {
         id: 'guardrail',
-        title: 'risk guardrail armed',
-        detail: 'daily loss limit and profit target are ready to wire.',
-        kind: 'system',
+        title: 'Risk guardrail armed',
+        detail: 'Daily loss limit and profit target ready.',
       },
       {
         id: 'feed',
-        title: feedStateBoi === 'ready' ? 'repo pulse live' : 'repo pulse waiting',
-        detail: latestOrderBoi ? latestOrderBoi.title : 'no fills yet from the repo log.',
-        kind: feedStateBoi,
+        title: feedState === 'ready' ? 'Repo pulse live' : 'Repo pulse waiting',
+        detail: latest ? latest.title : 'No fills yet from the repo log.',
       },
     ]
-  }, [feedStateBoi, orderHistoryBoi])
+  }, [feedState, orderHistory])
+
+  const visibleOrderHistory = orderHistory.slice(0, 6)
 
   return (
     <section className='relative h-screen overflow-y-auto overflow-x-hidden bg-white text-slate-900'>
@@ -117,154 +179,181 @@ export default function DashboardBoi() {
       />
       <div className='relative flex min-h-full w-full'>
         <aside className='hidden w-72 shrink-0 border-r border-slate-200 bg-slate-50/90 px-5 py-6 lg:flex lg:flex-col'>
-          <div className='text-sm font-semibold tracking-tight text-slate-900'>lukedavey.dev</div>
+          <div className='text-sm font-semibold tracking-tight text-slate-900'>Luke’s Trading Dashboard</div>
           <div className='mt-8 space-y-6 text-sm text-slate-500'>
-            <div>
-              <div className='mb-3 text-[0.65rem] uppercase tracking-[0.2em] text-slate-400'>Menu</div>
-              <div className='space-y-1'>
-                <div className='rounded-xl bg-white px-3 py-2 text-slate-900 shadow-sm'>Dashboard</div>
-                <div className='rounded-xl px-3 py-2 hover:bg-white'>Orders</div>
-                <div className='rounded-xl px-3 py-2 hover:bg-white'>Balances</div>
-                <div className='rounded-xl px-3 py-2 hover:bg-white'>History</div>
+            {sidebarGroups.map((group) => (
+              <div key={group.heading}>
+                <div className='mb-3 text-[0.65rem] uppercase tracking-[0.2em] text-slate-400'>{group.heading}</div>
+                <div className='space-y-1'>
+                  {group.items.map((item) => (
+                    <div
+                      key={item}
+                      className={item === 'Dashboard' ? 'rounded-xl bg-white px-3 py-2 text-slate-900 shadow-sm' : 'rounded-xl px-3 py-2 hover:bg-white'}
+                    >
+                      {item}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div>
-              <div className='mb-3 text-[0.65rem] uppercase tracking-[0.2em] text-slate-400'>Apps</div>
-              <div className='space-y-1'>
-                <div className='rounded-xl px-3 py-2 hover:bg-white'>Trading</div>
-                <div className='rounded-xl px-3 py-2 hover:bg-white'>Notifications</div>
-                <div className='rounded-xl px-3 py-2 hover:bg-white'>Settings</div>
-              </div>
-            </div>
+            ))}
           </div>
         </aside>
 
         <div className='min-w-0 flex-1'>
           <div className='mx-auto flex max-w-7xl flex-col px-4 py-4 sm:px-6 lg:px-8'>
             <motion.header
-              className='flex flex-col gap-4 border-b border-slate-200 pb-5 lg:flex-row lg:items-end lg:justify-between'
+              className='grid gap-5 border-b border-slate-200 pb-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end'
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: shouldReduceMotionBoi ? 0 : 0.32, ease: 'easeOut' }}
+              transition={{ duration: shouldReduceMotion ? 0 : 0.32, ease: 'easeOut' }}
             >
               <div className='space-y-3'>
                 <div className='flex flex-wrap items-center gap-2 text-[0.65rem] uppercase tracking-[0.24em] text-slate-500'>
                   <span className='rounded-full border border-slate-200 bg-slate-100 px-3 py-2 text-slate-700'>
-                    trading dashboard boi
+                    Trading Dashboard
                   </span>
                   <span>lukedavey.dev</span>
-                  <span>clean light mode</span>
+                  <span>live session</span>
                 </div>
-                <div>
-                  <h1 className='text-[clamp(2.4rem,5vw,4.4rem)] font-semibold leading-[0.95] tracking-[-0.06em] text-slate-900'>
-                    Welcome back, Luke
-                  </h1>
-                  <p className='mt-3 max-w-2xl text-sm leading-7 text-slate-500 sm:text-base'>
-                    A clean, light trading layout with a soft sidebar, compact balance blocks, and a scrollable order feed.
-                  </p>
+                <div className='grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-end'>
+                  <div>
+                    <h1 className='text-[clamp(2.4rem,5vw,4.4rem)] font-semibold leading-[0.95] tracking-[-0.06em] text-slate-900'>
+                      Luke’s Trading Dashboard
+                    </h1>
+                  </div>
+                  <div className='rounded-3xl border border-slate-200 bg-white px-5 py-4 shadow-sm'>
+                    <div className='text-[0.62rem] uppercase tracking-[0.24em] text-slate-400'>Eastern Clock</div>
+                    <div className='mt-2 text-xl font-medium text-slate-900'>
+                      {new Intl.DateTimeFormat('en-US', {
+                        timeZone: 'America/New_York',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: true,
+                      }).format(clock)}
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-              <div className='rounded-3xl border border-slate-200 bg-white px-5 py-4 shadow-sm'>
-                <div className='text-[0.62rem] uppercase tracking-[0.24em] text-slate-400'>eastern clock boi</div>
-                <div className='mt-2 text-xl font-medium text-slate-900'>
-                  {new Intl.DateTimeFormat('en-US', {
-                    timeZone: 'America/New_York',
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: true,
-                  }).format(new Date())}
-                </div>
-                <div className='mt-2 text-xs uppercase tracking-[0.2em] text-slate-500'>live session</div>
               </div>
             </motion.header>
 
             <div className='mt-6 grid gap-5 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]'>
               <motion.section
-                className='rounded-[1.75rem] border border-slate-200 bg-slate-50 p-4 shadow-sm sm:p-5'
+                className='rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5 shadow-sm sm:p-6'
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: shouldReduceMotionBoi ? 0 : 0.35, ease: 'easeOut' }}
+                transition={{ duration: shouldReduceMotion ? 0 : 0.35, ease: 'easeOut' }}
               >
                 <div className='grid gap-5 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]'>
                   <div className='rounded-[1.5rem] border border-slate-200 bg-white p-5 sm:p-6'>
-                    <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
-                      {metricCardsBoi.map((stat) => (
-                        <div key={stat.label} className='rounded-[1.1rem] border border-slate-200 bg-slate-50 p-4'>
-                          <div className='text-[0.61rem] uppercase tracking-[0.24em] text-slate-400'>{stat.label}</div>
-                          <div className='mt-3 text-[1.8rem] font-semibold leading-none text-slate-900'>
-                            {stat.value}
-                          </div>
-                          <p className='mt-3 text-[0.62rem] uppercase tracking-[0.2em] text-slate-500'>{stat.note}</p>
+                    <div className='flex items-start justify-between gap-3'>
+                      <div>
+                        <div className='text-[0.61rem] uppercase tracking-[0.24em] text-slate-400'>Total Balance</div>
+                        <div className='mt-2 text-[clamp(2.2rem,4vw,3.8rem)] font-semibold leading-none text-slate-900'>
+                          —
                         </div>
-                      ))}
+                      </div>
+                      <div className='rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-[0.62rem] uppercase tracking-[0.22em] text-slate-500'>
+                        Charges / Fees
+                      </div>
                     </div>
-
-                    <div className='mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4'>
-                      {controlCardsBoi.map((control) => (
-                        <div key={control.label} className='rounded-[1.1rem] border border-slate-200 bg-white p-4'>
-                          <div className='text-[0.61rem] uppercase tracking-[0.24em] text-slate-400'>
-                            {control.label}
-                          </div>
-                          <div className='mt-3 text-[1.7rem] font-medium text-slate-900'>{control.value}</div>
-                          <div className='mt-2 text-[0.62rem] uppercase tracking-[0.2em] text-slate-500'>
-                            {control.note}
-                          </div>
-                        </div>
-                      ))}
+                    <div className='mt-5 h-64 rounded-[1.25rem] border border-slate-200 bg-slate-50 p-4'>
+                      <ChartLine />
                     </div>
                   </div>
 
                   <div className='grid gap-4'>
                     <div className='rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm sm:p-6'>
-                      <div className='flex items-center justify-between gap-3'>
-                        <div className='text-[0.61rem] uppercase tracking-[0.26em] text-slate-400'>notifications</div>
-                        <div className='rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-[0.61rem] uppercase tracking-[0.22em] text-slate-500'>
-                          {feedStateBoi}
-                        </div>
-                      </div>
-                      <div className='mt-4 grid gap-3'>
-                        {visibleNotificationsBoi.map((notice) => (
-                          <div key={notice.id} className='rounded-[1.1rem] border border-slate-200 bg-slate-50 p-4'>
-                            <div className='text-[0.61rem] uppercase tracking-[0.24em] text-slate-400'>{notice.kind}</div>
-                            <div className='mt-2 text-base font-medium text-slate-900'>{notice.title}</div>
-                            <p className='mt-2 text-sm leading-6 text-slate-500'>{notice.detail}</p>
-                          </div>
-                        ))}
+                      <div className='text-[0.61rem] uppercase tracking-[0.26em] text-slate-400'>Profit Target</div>
+                      <div className='mt-4 text-3xl font-semibold text-slate-900'>—</div>
+                      <div className='mt-4 h-2 overflow-hidden rounded-full bg-slate-100'>
+                        <div className='h-full w-[36%] rounded-full bg-blue-500' />
                       </div>
                     </div>
-
                     <div className='rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm sm:p-6'>
-                      <div className='flex items-center justify-between gap-3'>
-                        <div className='text-[0.61rem] uppercase tracking-[0.26em] text-slate-400'>order history</div>
-                        <div className='text-[0.61rem] uppercase tracking-[0.22em] text-slate-500'>repo decision log / fills</div>
+                      <div className='text-[0.61rem] uppercase tracking-[0.26em] text-slate-400'>Daily Loss Limit</div>
+                      <div className='mt-4 text-3xl font-semibold text-slate-900'>—</div>
+                      <div className='mt-4 h-2 overflow-hidden rounded-full bg-slate-100'>
+                        <div className='h-full w-[18%] rounded-full bg-rose-500' />
                       </div>
-                      <div className='mt-4 space-y-3'>
+                    </div>
+                  </div>
+                </div>
+
+                <div className='mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
+                  {metricCards.map((stat) => (
+                    <div key={stat.label} className='rounded-[1.15rem] border border-slate-200 bg-white p-4'>
+                      <div className='text-[0.61rem] uppercase tracking-[0.24em] text-slate-400'>{stat.label}</div>
+                      <div className='mt-3 text-[1.8rem] font-semibold leading-none text-slate-900'>{stat.value}</div>
+                    </div>
+                  ))}
+                </div>
+              </motion.section>
+
+              <motion.section
+                className='rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5 shadow-sm sm:p-6'
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: shouldReduceMotion ? 0 : 0.38, ease: 'easeOut', delay: 0.03 }}
+              >
+                <div className='grid gap-4'>
+                  <div className='rounded-[1.45rem] border border-slate-200 bg-white p-5 shadow-sm'>
+                    <div className='flex items-center justify-between gap-3'>
+                      <div className='text-[0.61rem] uppercase tracking-[0.26em] text-slate-400'>Notifications</div>
+                      <div className='rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-[0.61rem] uppercase tracking-[0.22em] text-slate-500'>
+                        {feedState}
+                      </div>
+                    </div>
+                    <div className='mt-4 grid gap-3'>
+                      {notifications.map((notice) => (
+                        <div key={notice.id} className='rounded-[1.1rem] border border-slate-200 bg-slate-50 p-4'>
+                          <div className='text-[0.61rem] uppercase tracking-[0.24em] text-slate-400'>Alert</div>
+                          <div className='mt-2 text-base font-medium text-slate-900'>{notice.title}</div>
+                          <p className='mt-2 text-sm leading-6 text-slate-500'>{notice.detail}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className='rounded-[1.45rem] border border-slate-200 bg-white p-5 shadow-sm'>
+                    <div className='flex items-center justify-between gap-3'>
+                      <div className='text-[0.61rem] uppercase tracking-[0.26em] text-slate-400'>Order History</div>
+                      <div className='text-[0.61rem] uppercase tracking-[0.22em] text-slate-500'>Repo decision log / fills</div>
+                    </div>
+                    <div className='mt-4 overflow-hidden rounded-[1rem] border border-slate-200'>
+                      <div className='grid grid-cols-[1.15fr_0.9fr_0.55fr_0.55fr] gap-3 border-b border-slate-200 bg-slate-50 px-4 py-3 text-[0.61rem] uppercase tracking-[0.22em] text-slate-400'>
+                        <div>Trade</div>
+                        <div>Meta</div>
+                        <div>Time</div>
+                        <div>Status</div>
+                      </div>
+                      <div className='max-h-[24rem] overflow-y-auto'>
                         <AnimatePresence initial={false}>
-                          {orderHistoryBoi.map((entry) => (
-                            <motion.article
+                          {visibleOrderHistory.map((entry) => (
+                            <motion.div
                               key={entry.id}
-                              className='rounded-[1.1rem] border border-slate-200 bg-slate-50 p-4'
+                              className='grid grid-cols-[1.15fr_0.9fr_0.55fr_0.55fr] gap-3 border-b border-slate-100 px-4 py-3 text-sm last:border-b-0'
                               initial={{ opacity: 0, y: 8 }}
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, y: -6 }}
-                              transition={{ duration: shouldReduceMotionBoi ? 0 : 0.2, ease: 'easeOut' }}
+                              transition={{ duration: shouldReduceMotion ? 0 : 0.18, ease: 'easeOut' }}
                             >
-                              <div className='flex flex-wrap items-start justify-between gap-3'>
-                                <div>
-                                  <div className='text-[0.61rem] uppercase tracking-[0.24em] text-slate-400'>
-                                    fill / decision
-                                  </div>
-                                  <h3 className='mt-2 text-sm font-medium text-slate-900'>{entry.title}</h3>
-                                </div>
-                                <div className='text-right text-[0.61rem] uppercase tracking-[0.22em] text-slate-500'>
-                                  <div>{entry.meta}</div>
-                                  <div className='mt-1 text-slate-400'>{entry.time}</div>
-                                </div>
+                              <div className='font-medium text-slate-900'>{entry.title}</div>
+                              <div className='text-slate-500'>{entry.meta}</div>
+                              <div className='text-slate-500'>{entry.time}</div>
+                              <div>
+                                <span
+                                  className={[
+                                    'inline-flex rounded-full px-2.5 py-1 text-[0.62rem] uppercase tracking-[0.2em]',
+                                    entry.status === 'Closed'
+                                      ? 'bg-emerald-100 text-emerald-700'
+                                      : 'bg-rose-100 text-rose-700',
+                                  ].join(' ')}
+                                >
+                                  {entry.status}
+                                </span>
                               </div>
-                              <p className='mt-3 text-sm leading-6 text-slate-500'>{entry.detail}</p>
-                            </motion.article>
+                            </motion.div>
                           ))}
                         </AnimatePresence>
                       </div>
