@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 
 const metricCardsBoi = [
-  { label: 'Profit', value: '—', note: 'session pnl', tone: 'from-emerald-400/35 to-cyan-400/20' },
-  { label: 'Avg Win/Loss', value: '— / —', note: 'per trade', tone: 'from-sky-400/30 to-indigo-400/20' },
-  { label: 'Best Trade', value: '—', note: 'top realized move', tone: 'from-fuchsia-400/30 to-violet-400/20' },
-  { label: 'Win Ratio', value: '—', note: 'closed trades', tone: 'from-emerald-400/30 to-lime-400/20' },
-  { label: 'Risk/Reward', value: '—', note: 'avg ratio', tone: 'from-amber-400/30 to-orange-400/20' },
-  { label: 'Profit Factor', value: '—', note: 'gross wins / losses', tone: 'from-cyan-400/30 to-slate-400/20' },
+  { label: 'Profit', value: '—', note: 'session pnl' },
+  { label: 'Avg Win/Loss', value: '— / —', note: 'per trade' },
+  { label: 'Best Trade', value: '—', note: 'top realized move' },
+  { label: 'Win Ratio', value: '—', note: 'closed trades' },
+  { label: 'Risk/Reward', value: '—', note: 'avg ratio' },
+  { label: 'Profit Factor', value: '—', note: 'gross wins / losses' },
 ]
 
 const controlCardsBoi = [
@@ -110,108 +110,87 @@ export default function DashboardBoi() {
   }, [feedStateBoi, orderHistoryBoi])
 
   return (
-    <section className='relative h-screen overflow-y-auto overflow-x-hidden bg-[#03040a] text-[#f4f0e9]'>
+    <section className='relative h-screen overflow-y-auto overflow-x-hidden bg-black text-zinc-100'>
       <div
         aria-hidden='true'
-        className='absolute inset-0'
-        style={{
-          background:
-            'radial-gradient(circle at top left, rgba(56, 189, 248, 0.14) 0%, rgba(56, 189, 248, 0) 34%), radial-gradient(circle at top right, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0) 36%), linear-gradient(180deg, #090b12 0%, #03040a 55%, #020308 100%)',
-        }}
+        className='absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.04),transparent_42%)]'
       />
-      <div
-        aria-hidden='true'
-        className='absolute inset-0 opacity-[0.14]'
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px)',
-          backgroundSize: '72px 72px',
-          maskImage: 'radial-gradient(circle at center, black 42%, transparent 100%)',
-        }}
-      />
-      <div
-        aria-hidden='true'
-        className='absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02),transparent_60%)]'
-      />
-
       <div className='relative mx-auto flex min-h-full w-full max-w-7xl flex-col px-4 py-4 sm:px-6 lg:px-8'>
         <motion.section
-          className='rounded-[1.8rem] border border-white/10 bg-white/5 p-4 shadow-[0_30px_100px_rgba(0,0,0,0.32)] backdrop-blur-xl sm:p-5'
+          className='rounded-[1.6rem] border border-white/8 bg-[#090909] p-4 shadow-[0_20px_70px_rgba(0,0,0,0.55)] sm:p-5'
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: shouldReduceMotionBoi ? 0 : 0.42, ease: 'easeOut' }}
+          transition={{ duration: shouldReduceMotionBoi ? 0 : 0.35, ease: 'easeOut' }}
         >
-          <div className='grid gap-5 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]'>
-            <div className='rounded-[1.6rem] border border-white/10 bg-black/28 p-5 sm:p-6'>
+          <div className='grid gap-4 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]'>
+            <div className='rounded-[1.4rem] border border-white/8 bg-[#0d0d0d] p-5 sm:p-6'>
               <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
                 {metricCardsBoi.map((stat) => (
-                  <div key={stat.label} className='overflow-hidden rounded-[1.35rem] border border-white/10 bg-black/24 p-4'>
-                    <div className={'rounded-2xl border border-white/5 bg-gradient-to-br ' + stat.tone + ' p-4'}>
-                      <div className='text-[0.62rem] uppercase tracking-[0.24em] text-slate-200/70'>{stat.label}</div>
-                      <div className='mt-3 text-2xl font-semibold text-white'>{stat.value}</div>
-                    </div>
-                    <p className='mt-3 text-[0.62rem] uppercase tracking-[0.22em] text-slate-400'>{stat.note}</p>
+                  <div key={stat.label} className='rounded-[1.1rem] border border-white/8 bg-[#111111] p-4'>
+                    <div className='text-[0.61rem] uppercase tracking-[0.24em] text-zinc-500'>{stat.label}</div>
+                    <div className='mt-3 text-[1.9rem] font-semibold leading-none text-zinc-100'>{stat.value}</div>
+                    <p className='mt-3 text-[0.62rem] uppercase tracking-[0.2em] text-zinc-500'>{stat.note}</p>
                   </div>
                 ))}
               </div>
 
               <div className='mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4'>
                 {controlCardsBoi.map((control) => (
-                  <div key={control.label} className='rounded-[1.35rem] border border-white/10 bg-white/5 p-4'>
-                    <div className='text-[0.62rem] uppercase tracking-[0.24em] text-slate-400'>{control.label}</div>
-                    <div className='mt-3 text-2xl font-medium text-white'>{control.value}</div>
-                    <div className='mt-2 text-xs uppercase tracking-[0.22em] text-cyan-200/70'>{control.note}</div>
+                  <div key={control.label} className='rounded-[1.1rem] border border-white/8 bg-[#111111] p-4'>
+                    <div className='text-[0.61rem] uppercase tracking-[0.24em] text-zinc-500'>{control.label}</div>
+                    <div className='mt-3 text-[1.7rem] font-medium text-zinc-100'>{control.value}</div>
+                    <div className='mt-2 text-[0.62rem] uppercase tracking-[0.2em] text-zinc-500'>{control.note}</div>
                   </div>
                 ))}
               </div>
             </div>
 
             <div className='grid gap-4'>
-              <div className='rounded-[1.6rem] border border-white/10 bg-black/28 p-5 sm:p-6'>
+              <div className='rounded-[1.4rem] border border-white/8 bg-[#0d0d0d] p-5 sm:p-6'>
                 <div className='flex items-center justify-between gap-3'>
-                  <div className='text-[0.62rem] uppercase tracking-[0.26em] text-cyan-200/70'>notifications</div>
-                  <div className='rounded-full border border-white/10 bg-black/25 px-3 py-2 text-[0.62rem] uppercase tracking-[0.24em] text-slate-200/80'>
+                  <div className='text-[0.61rem] uppercase tracking-[0.26em] text-zinc-500'>notifications</div>
+                  <div className='rounded-full border border-white/8 bg-[#111111] px-3 py-2 text-[0.61rem] uppercase tracking-[0.22em] text-zinc-500'>
                     {feedStateBoi}
                   </div>
                 </div>
                 <div className='mt-4 grid gap-3'>
                   {visibleNotificationsBoi.map((notice) => (
-                    <div key={notice.id} className='rounded-[1.35rem] border border-white/10 bg-white/5 p-4'>
-                      <div className='text-[0.62rem] uppercase tracking-[0.24em] text-cyan-200/70'>{notice.kind}</div>
-                      <div className='mt-2 text-lg font-medium text-white'>{notice.title}</div>
-                      <p className='mt-2 text-sm leading-6 text-slate-300'>{notice.detail}</p>
+                    <div key={notice.id} className='rounded-[1.1rem] border border-white/8 bg-[#111111] p-4'>
+                      <div className='text-[0.61rem] uppercase tracking-[0.24em] text-zinc-500'>{notice.kind}</div>
+                      <div className='mt-2 text-base font-medium text-zinc-100'>{notice.title}</div>
+                      <p className='mt-2 text-sm leading-6 text-zinc-400'>{notice.detail}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className='rounded-[1.6rem] border border-white/10 bg-black/28 p-5 sm:p-6'>
+              <div className='rounded-[1.4rem] border border-white/8 bg-[#0d0d0d] p-5 sm:p-6'>
                 <div className='flex items-center justify-between gap-3'>
-                  <div className='text-[0.62rem] uppercase tracking-[0.26em] text-cyan-200/70'>order history</div>
-                  <div className='text-[0.62rem] uppercase tracking-[0.24em] text-slate-400'>repo decision log / fills</div>
+                  <div className='text-[0.61rem] uppercase tracking-[0.26em] text-zinc-500'>order history</div>
+                  <div className='text-[0.61rem] uppercase tracking-[0.22em] text-zinc-500'>repo decision log / fills</div>
                 </div>
                 <div className='mt-4 space-y-3'>
                   <AnimatePresence initial={false}>
                     {orderHistoryBoi.map((entry) => (
                       <motion.article
                         key={entry.id}
-                        className='rounded-[1.25rem] border border-white/10 bg-black/28 p-4'
+                        className='rounded-[1.1rem] border border-white/8 bg-[#111111] p-4'
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: shouldReduceMotionBoi ? 0 : 0.24, ease: 'easeOut' }}
+                        transition={{ duration: shouldReduceMotionBoi ? 0 : 0.2, ease: 'easeOut' }}
                       >
                         <div className='flex flex-wrap items-start justify-between gap-3'>
                           <div>
-                            <div className='text-[0.62rem] uppercase tracking-[0.24em] text-slate-400'>fill / decision</div>
-                            <h3 className='mt-2 text-base font-medium text-white'>{entry.title}</h3>
+                            <div className='text-[0.61rem] uppercase tracking-[0.24em] text-zinc-500'>fill / decision</div>
+                            <h3 className='mt-2 text-sm font-medium text-zinc-100'>{entry.title}</h3>
                           </div>
-                          <div className='text-right text-[0.62rem] uppercase tracking-[0.24em] text-slate-400'>
+                          <div className='text-right text-[0.61rem] uppercase tracking-[0.22em] text-zinc-500'>
                             <div>{entry.meta}</div>
-                            <div className='mt-1 text-cyan-200/70'>{entry.time}</div>
+                            <div className='mt-1 text-zinc-400'>{entry.time}</div>
                           </div>
                         </div>
-                        <p className='mt-3 text-sm leading-6 text-slate-300'>{entry.detail}</p>
+                        <p className='mt-3 text-sm leading-6 text-zinc-400'>{entry.detail}</p>
                       </motion.article>
                     ))}
                   </AnimatePresence>
