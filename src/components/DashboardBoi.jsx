@@ -150,17 +150,19 @@ export default function DashboardBoi() {
 
         if (cancelledBoi) return
 
-        const nextFeedBoi = commits.map((commit) => ({
-          id: commit.sha,
-          title: commit.commit?.message?.split('
-')?.[0] || 'repo update',
-          detail:
-            commit.commit?.message?.split('
-')?.slice(1).join(' ') || 'source-linked commit surfaced from the repository',
-          meta: (commit.commit?.author?.name || commit.author?.login || 'repo') + ' · ' + shortShaBoi(commit.sha),
-          time: formatRepoTimeBoi(commit.commit?.author?.date || new Date().toISOString()),
-          kind: 'repo',
-        }))
+        const nextFeedBoi = commits.map((commit) => {
+          const commitMessage = commit.commit?.message || 'repo update'
+          const commitSummary = commitMessage.split(String.fromCharCode(10))
+
+          return {
+            id: commit.sha,
+            title: commitSummary[0] || 'repo update',
+            detail: commitSummary.slice(1).join(' ') || 'source-linked commit surfaced from the repository',
+            meta: (commit.commit?.author?.name || commit.author?.login || 'repo') + ' · ' + shortShaBoi(commit.sha),
+            time: formatRepoTimeBoi(commit.commit?.author?.date || new Date().toISOString()),
+            kind: 'repo',
+          }
+        })
 
         setRepoFeedBoi(nextFeedBoi)
         setRepoStateBoi('ready')
