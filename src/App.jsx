@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import DashboardBoi from './components/DashboardBoi'
 import DreamHero from './components/DreamHero'
 import JournalPage from './components/JournalPage'
 
@@ -21,8 +22,8 @@ export default function App() {
   }
 
   return (
-    <main className="relative h-[100svh] w-full overflow-hidden">
-      {isJournalRoute ? <JournalPage onBack={handleBackHome} /> : <DreamHero />}
+    <main className='relative h-[100svh] w-full overflow-hidden'>
+      {isJournalRoute ? <JournalPage onBack={handleBackHome} /> : <DashboardBoi />}
     </main>
   )
 }
